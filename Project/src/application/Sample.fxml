@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SampleController">
+   <children>
+      <Button layoutX="251.0" layoutY="64.0" mnemonicParsing="false" onAction="#SJF" prefHeight="120.0" prefWidth="117.0" text="SJF" textAlignment="CENTER">
+         <font>
+            <Font name="Arial" size="18.0" />
+         </font>
+      </Button>
+      <Button layoutX="70.0" layoutY="207.0" mnemonicParsing="false" onAction="#Priority" prefHeight="120.0" prefWidth="117.0" text="Priority">
+         <font>
+            <Font name="Arial" size="18.0" />
+         </font>
+      </Button>
+      <Button layoutX="70.0" layoutY="64.0" mnemonicParsing="false" onAction="#FCFS" prefHeight="120.0" prefWidth="117.0" text="FCFS">
+         <font>
+            <Font name="Arial" size="18.0" />
+         </font>
+      </Button>
+      <Button layoutX="251.0" layoutY="207.0" mnemonicParsing="false" onAction="#PriorityNP" prefHeight="120.0" prefWidth="117.0" text="NP-Priority">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <Button layoutX="412.0" layoutY="200.0" mnemonicParsing="false" onAction="#switchToScene2" prefHeight="120.0" prefWidth="117.0" text="RR">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <Button layoutX="412.0" layoutY="64.0" mnemonicParsing="false" onAction="#NPSJF" prefHeight="120.0" prefWidth="117.0" text="NP-SJF">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
