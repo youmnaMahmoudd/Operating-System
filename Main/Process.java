@@ -1,4 +1,6 @@
-// Process class to represent a process
+package Main;
+
+// Main.Process class to represent a process
 public class Process {
     private int PID;
     private String Name;
@@ -26,6 +28,21 @@ public class Process {
         this.isArrived = isArrived;
         this.isStarted = isStarted;
         this.isFinished = isFinished;
+    }
+
+    public Process(String Name, double arrivalTime, double burstTime, int priorityNumber)
+    {
+        this.Name = Name;
+        this.arrivalTime = arrivalTime;
+        this.burstTime = burstTime;
+        this.priorityNumber = priorityNumber;
+    }
+
+    public Process(String Name, double arrivalTime, double burstTime)
+    {
+        this.Name = Name;
+        this.arrivalTime = arrivalTime;
+        this.burstTime = burstTime;
     }
 
     public int getPID() {
@@ -118,7 +135,7 @@ public class Process {
 
     @Override
     public String toString() {
-        return "Process{" +
+        return "Main.Process{" +
                 "PID=" + PID +
                 ", Name='" + Name + '\'' +
                 ", priorityNumber=" + priorityNumber +

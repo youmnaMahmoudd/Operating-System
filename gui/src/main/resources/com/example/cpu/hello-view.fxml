@@ -35,7 +35,7 @@
       <TextField fx:id="Ptext" layoutX="20.0" layoutY="465.0" prefHeight="31.0" prefWidth="71.0" />
       <TextField fx:id="Atext" layoutX="110.0" layoutY="465.0" prefHeight="31.0" prefWidth="71.0" />
       <TextField fx:id="Btext" layoutX="195.0" layoutY="465.0" prefHeight="31.0" prefWidth="71.0" />
-      <Button fx:id="Add" layoutX="137.0" layoutY="516.0" mnemonicParsing="false" text="Add Process" />
+      <Button fx:id="Add" layoutX="137.0" layoutY="516.0" mnemonicParsing="false" text="Add Main.Process" />
       <Button fx:id="start" layoutX="573.0" layoutY="144.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="145.0" text="Start" />
       <Label alignment="CENTER" layoutX="279.0" layoutY="287.0" prefHeight="21.0" prefWidth="85.0" text="Color" />
       <Label fx:id="color" alignment="CENTER" contentDisplay="CENTER" layoutX="275.0" layoutY="319.0" prefHeight="133.0" prefWidth="77.0" text="[c]" />
