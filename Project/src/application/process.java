@@ -1,33 +1,39 @@
 package application;
 
+import javafx.scene.paint.Color;
+
 public class process {
 	static int counter = 0;
 	String priority;
 	String arrivalTime;	
 	String currentBurst;
-	String color;
+	Color color;
 	String ID;
 	public String getID() {
 		return ID;
 	}
 	public void setID(String iD) {
-		ID = iD;
+		ID = counter+"0";
 	}
-	public String getColor() {
-		return color;
-	}
-	public void setColor(String color) {
-		this.color = color;
-	}
-	public process(String priority, String arrivalTime, String currentBurst,String ID) {
+
+	public process(String priority, String arrivalTime, String currentBurst,Color c) {
 		counter++;
-		this.ID=ID;
+		color=c;
+		this.ID=" "+counter+" ";
 		this.priority = priority;
 		this.arrivalTime = arrivalTime;
 		this.currentBurst = currentBurst;
 	}
-	public process(String arrivalTime, String currentBurst) {
+	public Color getColor() {
+		return color;
+	}
+	public void setColor(Color color) {
+		this.color = color;
+	}
+	public process(String arrivalTime, String currentBurst,Color c) {
 		counter++;
+		color=c;
+		this.ID=" "+counter+" ";
 		this.arrivalTime = arrivalTime;
 		this.currentBurst = currentBurst;
 	}

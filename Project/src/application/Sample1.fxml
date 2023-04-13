@@ -8,7 +8,7 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="164.0" prefWidth="261.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SampleController">
    <children>
       <Button layoutX="21.0" layoutY="100.0" mnemonicParsing="false" onAction="#RR" prefHeight="37.0" prefWidth="79.0" text="Start" />
-      <TextField layoutX="14.0" layoutY="38.0" prefHeight="31.0" prefWidth="230.0" />
+      <TextField fx:id="Quantumvalue" layoutX="14.0" layoutY="38.0" prefHeight="31.0" prefWidth="230.0" />
       <Text layoutX="14.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Quantum time" wrappingWidth="93.31638526916504" />
       <Button layoutX="138.0" layoutY="100.0" mnemonicParsing="false" onAction="#switchToScene1" prefHeight="37.0" prefWidth="79.0" text="Return" />
    </children>

@@ -11,17 +11,17 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 public class SampleController {
 
  private Stage stage;
  private Scene scene;
  private Parent root;
-@FXML TableView<process> tableview;
-@FXML TableColumn<process,Integer> AT;
-@FXML TableColumn<process,Integer> P;
-@FXML TableColumn<process,Integer> BT;
 
+@FXML TextField Quantumvalue;
+static int Qv=0;
+static int type=0;
 
  public void switchToScene1(ActionEvent event) throws IOException {
   root = FXMLLoader.load(getClass().getResource("Sample.fxml"));
@@ -31,7 +31,7 @@ public class SampleController {
   stage.show();
  }
  public void SJF(ActionEvent event) throws IOException{
-
+type=1;
 	//  Parent root = FXMLLoader.load(getClass().getResource("Action.fxml"));
 	  FXMLLoader loader = new FXMLLoader(getClass().getResource("Action.fxml"));	
 		root = loader.load();	
@@ -41,11 +41,13 @@ public class SampleController {
 		scene2Controller.displayName(username);
 	  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 	  scene = new Scene(root);
+	  String css = this.getClass().getResource("QV.css").toExternalForm();
+	   scene.getStylesheets().add(css);
 	  stage.setScene(scene);
 	  stage.show();
  }
  public void NPSJF(ActionEvent event) throws IOException{
-
+	 type=2;
 	//  Parent root = FXMLLoader.load(getClass().getResource("Action.fxml"));
 	  FXMLLoader loader = new FXMLLoader(getClass().getResource("Action.fxml"));	
 		root = loader.load();	
@@ -55,10 +57,13 @@ public class SampleController {
 		scene2Controller.displayName(username);
 	  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 	  scene = new Scene(root);
+	  String css = this.getClass().getResource("QV.css").toExternalForm();
+	   scene.getStylesheets().add(css);
 	  stage.setScene(scene);
 	  stage.show();
  }
  public void FCFS(ActionEvent event) throws IOException{
+type=3;
 
 	//  Parent root = FXMLLoader.load(getClass().getResource("Action.fxml"));
 	  FXMLLoader loader = new FXMLLoader(getClass().getResource("Action.fxml"));	
@@ -72,11 +77,13 @@ public class SampleController {
 	  scene = new Scene(root);
 	  String css = this.getClass().getResource("application.css").toExternalForm();
 	   scene.getStylesheets().add(css);
+	   String css1 = this.getClass().getResource("QV.css").toExternalForm();
+	   scene.getStylesheets().add(css1);
 	  stage.setScene(scene);
 	  stage.show();
  }
  public void Priority(ActionEvent event) throws IOException{
-
+	 type=4;
 	//  Parent root = FXMLLoader.load(getClass().getResource("Action.fxml"));
 	  FXMLLoader loader = new FXMLLoader(getClass().getResource("Action.fxml"));	
 		root = loader.load();	
@@ -86,11 +93,13 @@ public class SampleController {
 		scene2Controller.displayName(username);
 	  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 	  scene = new Scene(root);
+	  String css = this.getClass().getResource("QV.css").toExternalForm();
+	   scene.getStylesheets().add(css);
 	  stage.setScene(scene);
 	  stage.show();
  }
  public void PriorityNP(ActionEvent event) throws IOException{
-
+type=5;
 	//  Parent root = FXMLLoader.load(getClass().getResource("Action.fxml"));
 	  FXMLLoader loader = new FXMLLoader(getClass().getResource("Action.fxml"));	
 		root = loader.load();	
@@ -100,6 +109,8 @@ public class SampleController {
 		scene2Controller.displayName(username);
 	  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 	  scene = new Scene(root);
+	  String css = this.getClass().getResource("QV.css").toExternalForm();
+	   scene.getStylesheets().add(css);
 	  stage.setScene(scene);
 	  stage.show();
  }
@@ -111,9 +122,10 @@ public class SampleController {
   stage.show();
  }
  public void RR(ActionEvent event) throws IOException {
+	 type=6;
 	 FXMLLoader loader = new FXMLLoader(getClass().getResource("Action.fxml"));	
 		root = loader.load();	
-		
+		Qv=Integer.parseInt(Quantumvalue.getText());
 		ActionController scene2Controller = loader.getController();
 		String username="Round Robin";
 		scene2Controller.displayName(username);

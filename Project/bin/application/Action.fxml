@@ -25,24 +25,23 @@
       <Label fx:id="AvgT" layoutX="157.0" layoutY="111.0" text="[time]" />
       <Label layoutX="280.0" layoutY="82.0" text="Avg. waiting time" />
       <Label fx:id="AvgW" layoutX="313.0" layoutY="112.0" text="[time]" />
-      <Button fx:id="Sfinal" layoutX="571.0" layoutY="67.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="145.0" text="Show final" />
-      <Button fx:id="reset" layoutX="647.0" layoutY="106.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="71.0" text="reset" />
-      <TextField fx:id="PID" layoutX="20.0" layoutY="465.0" prefHeight="31.0" prefWidth="71.0" />
-      <TextField fx:id="ATtext" layoutX="110.0" layoutY="465.0" prefHeight="31.0" prefWidth="71.0" />
-      <TextField fx:id="BTtext" layoutX="195.0" layoutY="465.0" prefHeight="31.0" prefWidth="71.0" />
-      <Button fx:id="Add" layoutX="137.0" layoutY="516.0" mnemonicParsing="false" onAction="#Add" text="Add Process" />
-      <Button fx:id="start" layoutX="573.0" layoutY="144.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="145.0" text="Start" />
-      <ColorPicker fx:id="colorP" layoutX="275.0" layoutY="465.0" prefHeight="31.0" prefWidth="92.0" />
-      <Button fx:id="Pause" layoutX="571.0" layoutY="106.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="71.0" text="Pause" />
-      <TextField fx:id="Ptext" layoutX="377.0" layoutY="463.0" prefHeight="31.0" prefWidth="71.0" />
+      <Button fx:id="reset" layoutX="218.0" layoutY="516.0" mnemonicParsing="false" onAction="#switchToScene1" prefHeight="25.0" prefWidth="71.0" text="Return" />
+      <TextField fx:id="ATtext" layoutX="21.0" layoutY="465.0" prefHeight="31.0" prefWidth="71.0" />
+      <TextField fx:id="BTtext" layoutX="107.0" layoutY="465.0" prefHeight="31.0" prefWidth="71.0" />
+      <Button fx:id="Add" layoutX="107.0" layoutY="516.0" mnemonicParsing="false" onAction="#Add" text="Add Process" />
+      <ColorPicker fx:id="chooserColor" layoutX="188.0" layoutY="465.0" prefHeight="31.0" prefWidth="92.0" />
+      <TextField fx:id="Ptext" layoutX="293.0" layoutY="465.0" prefHeight="31.0" prefWidth="71.0" />
+      
       <TableView fx:id="tableview" layoutX="19.0" layoutY="265.0" prefHeight="186.0" prefWidth="357.0">
         <columns>
           <TableColumn fx:id="ID" prefWidth="50.00000190734863" text="PID" />
           <TableColumn fx:id="AT" prefWidth="91.99999237060547" text="Arrival time" />
             <TableColumn fx:id="BT" prefWidth="71.99996948242188" text="Burst time" />
-            <TableColumn prefWidth="72.66664123535156" text="Color" />
+            <TableColumn fx:id="C" prefWidth="72.66664123535156" text="Color" />
             <TableColumn fx:id="P" prefWidth="72.66664123535156" text="Priority" />
         </columns>
       </TableView>
+      <Label fx:id="QV" layoutX="432.0" layoutY="112.0" text="[time]" />
+      <Label fx:id="QT" layoutX="409.0" layoutY="84.0" text="Quantum time" />
    </children>
 </AnchorPane>
