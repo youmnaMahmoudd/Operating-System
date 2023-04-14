@@ -1,98 +1,90 @@
-import java.awt.desktop.SystemEventListener;
 import java.util.*;
-public class RoundRobin {
-    public static void main(String[] args) {
-        Scanner s = new Scanner(System.in);
-        System.out.println("Enter Number of Processes : ");
-        int num = s.nextInt();
-        int totalBurst = 0;
-        int time = 0;
+public class RoundRobin extends Scheduler {
 
-        Process process[] = new Process[num];
+    public int q;
+    public static int totalBurst = 0;
+    static int presentProcesses;
 
-        for (int i = 0; i < num; i++) {
-            process[i] = new Process(i + 1, "P" + (i + 1), 0, 0, 0, 0, 0, false, false, false, false);
+    public RoundRobin(ArrayList<Process> processes, int contSw, int q) {
+        super(processes, contSw);
+        this.q = q;
+        this.contextSwitch = contSw;
+    }
+
+    int numberOfProcesses = processes.size();
+    double[] bursts = new double[numberOfProcesses];
+
+    public void execute() {
+
+        for (int i = 0; i < numberOfProcesses; i++) {
+            bursts[i] = processes.get(i).getBurstTime();
+            totalBurst += bursts[i];
         }
 
-        for (int i = 0; i < num; i++) {
-            System.out.println("Enter Arrival time for P" + (i + 1) + " : ");
-            process[i].setArrivalTime(s.nextInt());
-        }
-
-        double bursts[] = new double[num];
-
-        for (int i = 0; i < num; i++) {
-            System.out.println("Enter Burst time for P" + (i + 1) + " : ");
-            int burst = s.nextInt();
-            process[i].setBurstTime(burst);
-            bursts[i] = burst;
-            totalBurst += burst;
-        }
-
-        System.out.println("Enter time quantum in ms : ");
-        int q = s.nextInt();
-
-        boolean entered;
+        presentProcesses = numberOfProcesses;
+        int counter=0;
 
         do {
-            for (int i = 0; i < num; i++) {
-                entered = false;
+            for (int i = 0; i < numberOfProcesses; i++) {
 
-                if (process[i].getArrivalTime() <= time)
-                    process[i].setArrived(true);
-
-                if (process[i].getBurstTime() >= q && process[i].isArrived()) {
-                    entered = true;
-                    process[i].setStarted(true);
-                    process[i].setActive(true);
-                    for (int j = 0; j < num; j++) {
-                        if (process[j].getBurstTime() != 0)
-                            process[j].setTurnAroundTime(process[j].getTurnAroundTime() + q);
-                    }
-                    process[i].setBurstTime(process[i].getBurstTime() - q);
-                    time += q;
-                    totalBurst -= q;
-                    process[i].setActive(false);
+                if (processes.get(i).getArrivalTime() <= timer){
+                    processes.get(i).setArrived(true);
+                    counter=0;
                 }
-                else if (process[i].getBurstTime() < q && process[i].getBurstTime() > 0 && process[i].isArrived()) {
-                    entered = true;
-                    process[i].setStarted(true);
-                    process[i].setActive(true);
-                    double rem = process[i].getBurstTime();
-                    for (int j = 0; j < num; j++) {
-                        if (process[j].getBurstTime() != 0)
-                            process[j].setTurnAroundTime(process[j].getTurnAroundTime() + rem);
+                else{
+                    counter++;
+                }
+
+                if (processes.get(i).getBurstTime() > q && processes.get(i).isArrived()) {
+                    processes.get(i).setStarted(true);
+                    processes.get(i).setActive(true);
+                    processes.get(i).setBurstTime(processes.get(i).getBurstTime() - q);
+                    timer += q;
+                    totalBurst -= q;
+                    processes.get(i).setActive(false);
+                    timer += contextSwitch;
+                }
+                else if (processes.get(i).getBurstTime() <= q && processes.get(i).getBurstTime() > 0 && processes.get(i).isArrived()) {
+                    processes.get(i).setStarted(true);
+                    processes.get(i).setActive(true);
+                    double rem = processes.get(i).getBurstTime();
+                    for (int j = 0; j < numberOfProcesses; j++) {
+                        if (processes.get(j).getBurstTime() != 0)
+                            processes.get(j).setTurnAroundTime(processes.get(j).getTurnAroundTime() + rem);
                     }
                     totalBurst -= rem;
-                    time += rem;
-                    process[i].setBurstTime(0);
-                    process[i].setActive(false);
-                    process[i].setFinished(true);
+                    timer += rem;
+                    processes.get(i).setTurnAroundTime(timer-processes.get(i).getArrivalTime());
+                    processes.get(i).setWaitingTime(processes.get(i).getTurnAroundTime() - bursts[i]);
+                    processes.get(i).setBurstTime(0);
+                    processes.get(i).setActive(false);
+                    processes.get(i).setFinished(true);
+                    presentProcesses--;
+                    if(presentProcesses!=0)
+                        timer += contextSwitch;
                 }
 
-                if (!entered)
-                    time += 1;
+                if (counter == numberOfProcesses){
+                    timer += 1;
+                    counter=0;
+                }
             }
-        } while (totalBurst != 0) ;
+        } while (totalBurst != 0);
 
-        for (int i = 0; i < num; i++) {
-            process[i].setTurnAroundTime(process[i].getTurnAroundTime() - process[i].getArrivalTime());
-            process[i].setWaitingTime(process[i].getTurnAroundTime() - bursts[i]);
-        }
-
-        double AverageTurnAroundTime = 0, AverageWaitingTime = 0;
+        double AverageTurnAroundTime, AverageWaitingTime, TotalTurnAround=0, TotalWaiting=0;
         System.out.println("Process\t\t\tWaitingTime\t\t\tTurnAroundTime");
-        for (int i = 0; i < num; i++) {
-            double w = process[i].getWaitingTime();
-            double t = process[i].getTurnAroundTime();
-            AverageTurnAroundTime += t;
-            AverageWaitingTime += w;
-            System.out.println(process[i].getName() + "\t\t\t\t" + w + "\t\t\t\t\t" + t);
+        for (int i = 0; i < numberOfProcesses; i++) {
+            double w = processes.get(i).getWaitingTime();
+            double t = processes.get(i).getTurnAroundTime();
+            TotalTurnAround += t;
+            TotalWaiting += w;
+            System.out.println(processes.get(i).getName() + "\t\t\t\t" + w + "\t\t\t\t\t" + t);
         }
 
-        AverageTurnAroundTime = (AverageTurnAroundTime / num);
-        AverageWaitingTime = (AverageWaitingTime / num);
+        AverageTurnAroundTime = (TotalTurnAround / numberOfProcesses);
+        AverageWaitingTime = (TotalWaiting / numberOfProcesses);
         System.out.println("AverageTurnAroundTime = " + AverageTurnAroundTime);
         System.out.println("AverageWaitingTime = " + AverageWaitingTime);
+        System.out.println("Time of Execution = "+timer);
     }
 }
