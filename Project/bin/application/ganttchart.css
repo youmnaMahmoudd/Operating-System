@@ -1,0 +1,18 @@
+.red {
+    -fx-background-color:rgba(128,0,0,0.7);
+}
+.green {
+    -fx-background-color:rgba(0,128,0,0.7);
+}
+.blue {
+    -fx-background-color:rgba(0,0,128,0.7);
+}
+.pink{
+  -fx-background-color:rgba(255,0,255, 0.7);
+}
+.yellow{
+  -fx-background-color:rgba(255,255,0,0.7);
+}
+.olive{
+  -fx-background-color:rgba(128,128,0,0.7);
+}

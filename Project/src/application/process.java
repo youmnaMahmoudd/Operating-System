@@ -2,13 +2,132 @@ package application;
 
 import javafx.scene.paint.Color;
 
-public class process {
+public class Process {
 	static int counter = 0;
 	String priority;
-	String arrivalTime;	
+	String arrivaltime;	
 	String currentBurst;
-	Color color;
+	String color;
 	String ID;
+	 private int priorityNumber;
+	 private double arrivalTime = 0.0;
+	 private double burstTime = 0.0;
+	 private double waitingTime = 0.0;
+	 private double turnAroundTime = 0.0;
+     private boolean isActive = false;
+	 private boolean isArrived = false;
+	 private boolean isStarted = false;
+	 private boolean isFinished = false;
+
+	   
+		public Process(String priority, String arrivaltime, String currentBurst,String c) {
+			counter++;
+			color=c;
+			this.arrivalTime=Double.parseDouble(arrivaltime);
+			this.burstTime=Double.parseDouble(currentBurst);
+			this.priorityNumber=Integer.parseInt(priority);
+
+			this.ID=" "+counter+" ";
+			this.priority = priority;
+			this.arrivaltime = arrivaltime;
+			this.currentBurst = currentBurst;
+		}
+		public Process(String arrivaltime, String currentBurst,String c) {
+			counter++;
+			color=c;
+			this.arrivalTime=Double.parseDouble(arrivaltime);
+			this.burstTime=Double.parseDouble(currentBurst);
+			this.ID=" "+counter+" ";
+			this.arrivaltime = arrivaltime;
+			this.currentBurst = currentBurst;
+		}
+	    public Process(String color, double arrivalTime, double burstTime)
+	    {
+	    	this.ID=" "+counter+" ";
+	        this.color = color;
+	        this.arrivalTime = arrivalTime;
+	        this.burstTime = burstTime;
+	    }
+
+		   public String getName() {
+		        return color;
+		    }
+
+		    public void setName(String name) {
+		        ID = name;
+		    }
+	    public int getPriorityNumber() {
+	        return priorityNumber;
+	    }
+
+	    public void setPriorityNumber(int priorityNumber) {
+	        this.priorityNumber = priorityNumber;
+	    }
+
+	    public double getArrivalTime() {
+	        return arrivalTime;
+	    }
+
+	    public void setArrivalTime(double arrivalTime) {
+	        this.arrivalTime = arrivalTime;
+	    }
+
+	    public double getBurstTime() {
+	        return burstTime;
+	    }
+
+	    public void setBurstTime(double burstTime) {
+	        this.burstTime = burstTime;
+	    }
+
+	    public double getWaitingTime() {
+	        return waitingTime;
+	    }
+
+	    public void setWaitingTime(double waitingTime) {
+	        this.waitingTime = waitingTime;
+	    }
+
+	    public double getTurnAroundTime() {
+	        return turnAroundTime;
+	    }
+
+	    public void setTurnAroundTime(double turnAroundTime) {
+	        this.turnAroundTime = turnAroundTime;
+	    }
+
+	    public boolean isActive() {
+	        return isActive;
+	    }
+
+	    public void setActive(boolean active) {
+	        isActive = active;
+	    }
+
+	    public boolean isArrived() {
+	        return isArrived;
+	    }
+
+	    public void setArrived(boolean arrived) {
+	        isArrived = arrived;
+	    }
+
+	    public boolean isStarted() {
+	        return isStarted;
+	    }
+
+	    public void setStarted(boolean started) {
+	        isStarted = started;
+	    }
+
+	    public boolean isFinished() {
+	        return isFinished;
+	    }
+
+	    public void setFinished(boolean finished) {
+	        isFinished = finished;
+	    }
+
 	public String getID() {
 		return ID;
 	}
@@ -16,38 +135,25 @@ public class process {
 		ID = counter+"0";
 	}
 
-	public process(String priority, String arrivalTime, String currentBurst,Color c) {
-		counter++;
-		color=c;
-		this.ID=" "+counter+" ";
-		this.priority = priority;
-		this.arrivalTime = arrivalTime;
-		this.currentBurst = currentBurst;
-	}
-	public Color getColor() {
+
+	public String getColor() {
 		return color;
 	}
-	public void setColor(Color color) {
+	public void setColor(String color) {
 		this.color = color;
 	}
-	public process(String arrivalTime, String currentBurst,Color c) {
-		counter++;
-		color=c;
-		this.ID=" "+counter+" ";
-		this.arrivalTime = arrivalTime;
-		this.currentBurst = currentBurst;
-	}
+
 	public String getPriority() {
 		return priority;
 	}
 	public void setPriority(String priority) {
 		this.priority = priority;
 	}
-	public String getArrivalTime() {
-		return arrivalTime;
+	public String getArrivaltime() {
+		return arrivaltime;
 	}
-	public void setArrivalTime(String arrivalTime) {
-		this.arrivalTime = arrivalTime;
+	public void setArrivaltime(String arrivaltime) {
+		this.arrivaltime = arrivaltime;
 	}
 	public String getCurrentBurst() {
 		return currentBurst;

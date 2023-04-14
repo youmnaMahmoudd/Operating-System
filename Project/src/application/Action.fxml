@@ -1,38 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="564.0" prefWidth="772.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ActionController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="564.0" prefWidth="656.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ActionController">
    <children>
       <Label layoutX="18.0" layoutY="84.0" text="time elapsed" />
-      <Label fx:id="elapsed" layoutX="41.0" layoutY="112.0" text="[time]" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#7babd7" height="54.0" layoutX="1.0" layoutY="1.0" stroke="BLACK" strokeType="INSIDE" width="772.0" />
-      <Label fx:id="nameLabel" alignment="CENTER" layoutX="300.0" layoutY="10.0" text=" scheduler" textAlignment="CENTER" textFill="WHITE" textOverrun="WORD_ELLIPSIS">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#81a5c5" height="54.0" layoutX="1.0" layoutY="1.0" stroke="BLACK" strokeType="INSIDE" width="656.0" />
+      <Label fx:id="nameLabel" alignment="CENTER" layoutX="240.0" layoutY="10.0" text="TYPE scheduler" textFill="WHITE" textOverrun="CENTER_ELLIPSIS">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Rectangle fx:id="Chart" arcHeight="5.0" arcWidth="5.0" fill="#7babd7" height="66.0" layoutX="7.0" layoutY="189.0" stroke="BLACK" strokeType="INSIDE" width="752.0" />
       <Label layoutX="125.0" layoutY="82.0" text="Avg. Turnaround time" />
-      <Label fx:id="AvgT" layoutX="157.0" layoutY="111.0" text="[time]" />
+      <Label fx:id="nameLabel1" layoutX="157.0" layoutY="111.0" text="[time]" />
       <Label layoutX="280.0" layoutY="82.0" text="Avg. waiting time" />
-      <Label fx:id="AvgW" layoutX="313.0" layoutY="112.0" text="[time]" />
-      <Button fx:id="reset" layoutX="218.0" layoutY="516.0" mnemonicParsing="false" onAction="#switchToScene1" prefHeight="25.0" prefWidth="71.0" text="Return" />
-      <TextField fx:id="ATtext" layoutX="21.0" layoutY="465.0" prefHeight="31.0" prefWidth="71.0" />
-      <TextField fx:id="BTtext" layoutX="107.0" layoutY="465.0" prefHeight="31.0" prefWidth="71.0" />
-      <Button fx:id="Add" layoutX="107.0" layoutY="516.0" mnemonicParsing="false" onAction="#Add" text="Add Process" />
-      <ColorPicker fx:id="chooserColor" layoutX="188.0" layoutY="465.0" prefHeight="31.0" prefWidth="92.0" />
-      <TextField fx:id="Ptext" layoutX="293.0" layoutY="465.0" prefHeight="31.0" prefWidth="71.0" />
+      <Label fx:id="nameLabel2" layoutX="313.0" layoutY="112.0" text="[time]" />
+      <TextField fx:id="ATtext" layoutX="463.0" layoutY="335.0" prefHeight="31.0" prefWidth="71.0" />
+      <TextField fx:id="BTtext" layoutX="463.0" layoutY="376.0" prefHeight="31.0" prefWidth="71.0" />
+      <Button fx:id="Add" layoutX="560.0" layoutY="351.0" mnemonicParsing="false" onAction="#Add" text="Add Process" />
+      <TextField fx:id="Ptext" layoutX="463.0" layoutY="461.0" prefHeight="31.0" prefWidth="71.0" />
       
-      <TableView fx:id="tableview" layoutX="19.0" layoutY="265.0" prefHeight="186.0" prefWidth="357.0">
+      <TableView fx:id="tableview" layoutX="18.0" layoutY="312.0" prefHeight="199.0" prefWidth="357.0">
         <columns>
           <TableColumn fx:id="ID" prefWidth="50.00000190734863" text="PID" />
           <TableColumn fx:id="AT" prefWidth="91.99999237060547" text="Arrival time" />
@@ -43,5 +40,14 @@
       </TableView>
       <Label fx:id="QV" layoutX="432.0" layoutY="112.0" text="[time]" />
       <Label fx:id="QT" layoutX="409.0" layoutY="84.0" text="Quantum time" />
+      <HBox fx:id="hbox" layoutX="12.0" layoutY="143.0" prefHeight="115.0" prefWidth="664.0" />
+      <Button layoutX="565.0" layoutY="410.0" mnemonicParsing="false" onAction="#switchToScene1" prefHeight="25.0" prefWidth="71.0" text="Return" />
+      <ComboBox fx:id="choiceBox" layoutX="458.0" layoutY="422.0" onAction="#choice" prefHeight="25.0" prefWidth="81.0" />
+      <Label fx:id="AvgT1" layoutX="43.0" layoutY="112.0" text="[time]" />
+      <Label layoutX="384.0" layoutY="342.0" text="Arrival time" />
+      <Label layoutX="387.0" layoutY="383.0" text="Burst time" />
+      <Label layoutX="400.0" layoutY="426.0" text="Color" />
+      <Label fx:id="pr" layoutX="400.0" layoutY="468.0" text="Priority" />
+      <Button layoutX="585.0" layoutY="448.0" mnemonicParsing="false" onAction="#act" text="Button" />
    </children>
 </AnchorPane>
