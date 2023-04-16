@@ -31,6 +31,10 @@ public class Process {
 			this.priority = priority;
 			this.arrivaltime = arrivaltime;
 			this.currentBurst = currentBurst;
+			isActive = false;
+			isArrived = false;
+		    isStarted = false;
+			isFinished = false;
 		}
 		public Process(String arrivaltime, String currentBurst,String c) {
 			counter++;
@@ -126,6 +130,22 @@ public class Process {
 
 	    public void setFinished(boolean finished) {
 	        isFinished = finished;
+	    }
+	    @Override
+	    public String toString() {
+	        return "Main.Process{" +
+	                "PID=" + ID +
+	                ", Name='" + color + '\'' +
+	                ", priorityNumber=" + priorityNumber +
+	                ", arrivalTime=" + arrivalTime +
+	                ", burstTime=" + burstTime +
+	                ", waitingTime=" + waitingTime +
+	                ", turnAroundTime=" + turnAroundTime +
+	                ", isActive=" + isActive +
+	                ", isArrived=" + isArrived +
+	                ", isStarted=" + isStarted +
+	                ", isFinished=" + isFinished +
+	                '}';
 	    }
 
 	public String getID() {

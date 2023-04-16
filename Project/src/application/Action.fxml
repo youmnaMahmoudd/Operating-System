@@ -41,13 +41,13 @@
       <Label fx:id="QV" layoutX="432.0" layoutY="112.0" text="[time]" />
       <Label fx:id="QT" layoutX="409.0" layoutY="84.0" text="Quantum time" />
       <HBox fx:id="hbox" layoutX="12.0" layoutY="143.0" prefHeight="115.0" prefWidth="664.0" />
-      <Button layoutX="565.0" layoutY="410.0" mnemonicParsing="false" onAction="#switchToScene1" prefHeight="25.0" prefWidth="71.0" text="Return" />
+      <Button layoutX="565.0" layoutY="464.0" mnemonicParsing="false" onAction="#switchToScene1" prefHeight="25.0" prefWidth="71.0" text="Return" />
       <ComboBox fx:id="choiceBox" layoutX="458.0" layoutY="422.0" onAction="#choice" prefHeight="25.0" prefWidth="81.0" />
       <Label fx:id="AvgT1" layoutX="43.0" layoutY="112.0" text="[time]" />
       <Label layoutX="384.0" layoutY="342.0" text="Arrival time" />
       <Label layoutX="387.0" layoutY="383.0" text="Burst time" />
       <Label layoutX="400.0" layoutY="426.0" text="Color" />
       <Label fx:id="pr" layoutX="400.0" layoutY="468.0" text="Priority" />
-      <Button layoutX="585.0" layoutY="448.0" mnemonicParsing="false" onAction="#act" text="Button" />
+      <Button layoutX="567.0" layoutY="430.0" mnemonicParsing="false" onAction="#act" prefHeight="25.0" prefWidth="68.0" text="Start" />
    </children>
 </AnchorPane>

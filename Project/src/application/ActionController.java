@@ -74,7 +74,7 @@ public class ActionController  implements Initializable {
     GanttChart<Number,String> lineChart = new GanttChart<Number,String>(xAxis,yAxis);
     ArrayList<Process> data=new ArrayList<Process>();
 	 String machine =   "Processes" ;
-     XYChart.Series series1 = new XYChart.Series(); 
+	 XYChart.Series series1 = new XYChart.Series(); 
      //Function to choose color
     public String choice() {
     	String v=choiceBox.getValue().toString();
@@ -96,7 +96,7 @@ public class ActionController  implements Initializable {
 	        yAxis.setCategories(FXCollections.<String>observableArrayList(Arrays.asList(machine)));
 	        lineChart.setLegendVisible(false);
 	        lineChart.setBlockHeight( 50);           
-	        lineChart.getData().addAll(series1);           
+	       lineChart.getData().addAll(series1);           
 	        lineChart.getStylesheets().add(getClass().getResource("ganttchart.css").toExternalForm());
 	        lineChart.setLayoutX(-1);
 	        lineChart.setLayoutY(0);	
@@ -143,28 +143,56 @@ public class ActionController  implements Initializable {
 	public void displayQt(String username) {
 		QV.setText(username );
 	}
-   
-   // For adding new process
-	public void Add() {
+
+	
+	Scheduler fcfs = new FirstComeFirstServe();
+	RoundRobin roundRobin= new RoundRobin(2);
+	public void Add() throws IOException, InterruptedException {
 		Process p;
-		
+
 		if(x.type==3) {
 			 p=new Process(ATtext.getText(),BTtext.getText(),choice());
-			 Scheduler fcfs = new FirstComeFirstServe();
-//		        fcfs.add(new Process("green", 0, 2));
-//		        fcfs.add(new Process("blue", 0, 4));
-//		        fcfs.add(new Process("pink", 2, 1));
-//		        fcfs.add(new Process("olive", 2, 3));
+
 			 fcfs.add(p);
+
+		}
+		else{
+			
+			 p=new Process(Ptext.getText(),ATtext.getText(),BTtext.getText(),choice());
+			data.add(p);
+		//	ArrayList<Things> x=roundRobin.add(p);
+//			Timeline  timeline = new Timeline(new KeyFrame(Duration.seconds(1), e ->{
+//				 
+//				
+//		        hbox.getChildren().removeAll(hbox.getChildren());
+//				hbox.getChildren().add(new ChartDisplay().createChart(x));
+//		        	
+//		}));
+//		timeline.setCycleCount(Animation.INDEFINITE);
+//		timeline.play();      
+            	
+				
+			    
+		}
+
+        tableview.getItems().add(p);
+
+	}
+	@FXML
+	public void act() throws InterruptedException {
+		if(x.type==3) {
+			  
 		      fcfs.process();
-			 data.add(p);
+
 			  for (int i = 0; i < fcfs.getTimeline().size(); i++)
               {
+				   series1 = new XYChart.Series(); 
+				  
                   List<Event> timeline = fcfs.getTimeline();
-                  System.out.print(timeline.get(i).getStartTime() + "(" + timeline.get(i).getProcessName() + ")");
 	              series1.getData().add(new XYChart.Data((int)timeline.get(i).getStartTime(), machine, new ExtraData((int)(timeline.get(i).getFinishTime()-timeline.get(i).getStartTime()), timeline.get(i).getProcessName())));
-
-                  if (i == fcfs.getTimeline().size() - 1)
+	              lineChart.getData().addAll(series1); 
+                 
+	              if (i == fcfs.getTimeline().size() - 1)
                   {
                       System.out.print(timeline.get(i).getFinishTime());
                   }
@@ -174,39 +202,18 @@ public class ActionController  implements Initializable {
 
 			  displayAVwaiting(String.valueOf(fcfs.getAverageWaitingTime()));
 		}
-		else {
-			
-			 p=new Process(Ptext.getText(),ATtext.getText(),BTtext.getText(),choice());
-			data.add(p);
+		else if(x.type==6) {
+
+        RoundRobin roundRobin = new RoundRobin(data,x.Qv);
+        
+            displayAvTurnAround(String.valueOf(roundRobin.getAverageTurnAroundTime()));
+
+		    displayAVwaiting(String.valueOf(roundRobin.getAverageWaitingTime()));
+		    hbox.getChildren().removeAll(hbox.getChildren());
+			hbox.getChildren().add(new ChartDisplay().createChart( roundRobin.execute()));
+			roundRobin=null;
 		}
-        tableview.getItems().add(p);
 
-	}
-	@FXML
-	public void act() throws InterruptedException {
-		 Scheduler fcfs = new FirstComeFirstServe();
-	        fcfs.add(new Process("green", 0, 2));
-	        fcfs.add(new Process("blue", 0, 4));
-	        fcfs.add(new Process("pink", 2, 1));
-	        fcfs.add(new Process("olive", 2, 3));
-	       
-	        fcfs.process();
-	     
-	        	  
-	        	 // Thread.sleep(1000);
-	        	  for (int i = 0; i < fcfs.getTimeline().size(); i++)
-	              {
-	                  List<Event> timeline = fcfs.getTimeline();
-	                  System.out.print(timeline.get(i).getStartTime() + "(" + timeline.get(i).getProcessName() + ")");
-		              series1.getData().add(new XYChart.Data((int)timeline.get(i).getStartTime(), machine, new ExtraData((int)(timeline.get(i).getFinishTime()-timeline.get(i).getStartTime()), timeline.get(i).getProcessName())));
-
-	                  if (i == fcfs.getTimeline().size() - 1)
-	                  {
-	                      System.out.print(timeline.get(i).getFinishTime());
-	                  }
-	              }
-
-	        
 	}
 	// Both for setting the Table view
 	 public ObservableList<Process>  getprocesses()

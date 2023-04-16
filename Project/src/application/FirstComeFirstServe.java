@@ -2,6 +2,7 @@ package application;
 
 import application.Process;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,7 +26,8 @@ public class FirstComeFirstServe extends Scheduler
             }
         });
 
-        List<Event> timeline = this.getTimeline();
+        List<Event> timeline = new  ArrayList();
+       timeline = this.getTimeline();
 
         for (Process row : this.getRows())
         {
