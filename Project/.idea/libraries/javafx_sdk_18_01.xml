@@ -1,0 +1,22 @@
+<component name="libraryTable">
+  <library name="javafx-sdk-18.01">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Downloads/javafx-graphics-18.0.1-linux.jar!/" />
+      <root url="file://$PROJECT_DIR$/.." />
+      <root url="file://$USER_HOME$/Downloads/poi-bin-5.2.2" />
+      <root url="file://$USER_HOME$/Downloads/lib" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/Downloads/log4j-core-2.17.2-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/.." />
+      <root url="file://$PROJECT_DIR$/src" />
+      <root url="file://$PROJECT_DIR$/../gui/src/main/java" />
+      <root url="file://$USER_HOME$/Downloads/javafx-sdk-18.0.1" />
+    </SOURCES>
+    <jarDirectory url="file://$USER_HOME$/Downloads/lib" recursive="false" />
+    <jarDirectory url="file://$USER_HOME$/Downloads/poi-bin-5.2.2" recursive="false" />
+    <jarDirectory url="file://$USER_HOME$/Downloads/javafx-sdk-18.0.1" recursive="false" type="SOURCES" />
+  </library>
+</component>

@@ -1,0 +1,28 @@
+<component name="libraryTable">
+  <library name="javax">
+    <CLASSES>
+      <root url="file://$MAVEN_REPOSITORY$/javax" />
+      <root url="file://$MAVEN_REPOSITORY$/junit" />
+      <root url="file://$MAVEN_REPOSITORY$/log4j" />
+      <root url="file://$MAVEN_REPOSITORY$/logkit" />
+      <root url="file://$MAVEN_REPOSITORY$/net" />
+      <root url="file://$MAVEN_REPOSITORY$/org" />
+      <root url="file://$MAVEN_REPOSITORY$/oro" />
+      <root url="file://$MAVEN_REPOSITORY$/sslext" />
+      <root url="file://$MAVEN_REPOSITORY$/xerces" />
+      <root url="file://$MAVEN_REPOSITORY$/xml-apis" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$MAVEN_REPOSITORY$/javax" recursive="false" />
+    <jarDirectory url="file://$MAVEN_REPOSITORY$/junit" recursive="false" />
+    <jarDirectory url="file://$MAVEN_REPOSITORY$/log4j" recursive="false" />
+    <jarDirectory url="file://$MAVEN_REPOSITORY$/logkit" recursive="false" />
+    <jarDirectory url="file://$MAVEN_REPOSITORY$/net" recursive="false" />
+    <jarDirectory url="file://$MAVEN_REPOSITORY$/org" recursive="false" />
+    <jarDirectory url="file://$MAVEN_REPOSITORY$/oro" recursive="false" />
+    <jarDirectory url="file://$MAVEN_REPOSITORY$/sslext" recursive="false" />
+    <jarDirectory url="file://$MAVEN_REPOSITORY$/xerces" recursive="false" />
+    <jarDirectory url="file://$MAVEN_REPOSITORY$/xml-apis" recursive="false" />
+  </library>
+</component>
