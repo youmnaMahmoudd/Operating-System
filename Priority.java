@@ -1,7 +1,6 @@
 package osProject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Priority {
 	
@@ -13,7 +12,7 @@ public class Priority {
 			int ind = curProcess(curTime,process);
 			if(ind != -1) {
 				Process p = process.get(ind);
-				p.setCurrentBurst(String.valueOf(p.getBurstTime()));
+				p.setDur(p.getBurstTime());
 				p.setStartTime(curTime);
 				ans.add(p);
 				curTime+=p.getBurstTime();
@@ -22,41 +21,66 @@ public class Priority {
 		}
 		return ans;
 	}
-	public static ArrayList<Process> priorityPremmetive(ArrayList<Process> data){
+	public static ArrayList<Process> pp (ArrayList<Process> data){
 		ArrayList<Process> ans = new ArrayList<>();
-		ArrayList<Process> process = data;
+		ArrayList<Process> process = new ArrayList<>();
+		ArrayList<Process> sort = new ArrayList<>();
+		for(int i9=0;i9<data.size();i9++) {
+			Process p = data.get(i9);
+			Process g = new Process(p.getID(),p.getArrivalTime(),
+					p.getBurstTime(),p.getPriority(),
+					p.getColor());
+			Process gg = new Process(p.getID(),p.getArrivalTime(),
+					p.getBurstTime(),p.getPriority(),
+					p.getColor());
+			process.add(g);
+			sort.add(gg);
+		}
 
-		int curTime = 0,curProcess = 0,prevInd = -1,dur = 0;
+		ArrayList<Process> sorted = sortProcess(sort);
+		
+		int curTime = 0;
 		while(process.size() > 0) {
-			if(curTime != 0 && prevInd != -1) {
-				Process p = process.get(prevInd);
-				if(p.getBurstTime() - 1 == 0) {
-					process.remove(prevInd);
-				}else {
-					process.get(prevInd).setBurstTime(p.getBurstTime()-1);
-				}
-			}
 			int ind = curProcess(curTime,process);
+			double minArr = 100000.0;
+			int in = 0;
 			if(ind != -1) {
 				Process p = process.get(ind);
-				Process g = new Process(p.getID(),Double.parseDouble(p.getArrivaltime()),Double.parseDouble(p.getCurrentBurst()),p.getPriority(),p.getColor());
-				if(curProcess != Integer.valueOf(g.getID())){
-					g.setStartTime(curTime);
-					if(ans.size()>0)
-						ans.get(ans.size()-1).setCurrentBurst(String.valueOf(dur + 1));
-					ans.add(g);
-					dur = 0;
-				}else dur++;
-				prevInd = ind;
-				curProcess = Integer.valueOf(g.getID());
-			}else {
-				if(process.size()==0) {
-					if(ans.size()>0)
-						ans.get(ans.size()-1).setCurrentBurst(String.valueOf(dur + 1));
-				}
-			}
 
-			curTime++;
+				for(int i = 0;i<sorted.size();i++) {
+					Process s = sorted.get(i);
+					int pd = Integer.parseInt(p.getID());
+					int sd = Integer.parseInt(s.getID());
+					if(sd == pd) {
+						in = i;
+						break;
+					}
+					if(s.getArrivalTime() < minArr) {
+						
+						minArr = s.getArrivalTime();
+
+					}
+				}
+
+				Process g = new Process(p.getID(),p.getArrivalTime(),
+						p.getBurstTime(),p.getPriority(),
+						p.getColor());
+				g.setStartTime(curTime);
+				
+				if(minArr >= ((double)curTime+p.getBurstTime())) {
+					g.setDur(p.getBurstTime());
+					curTime = (int) (curTime+p.getBurstTime());
+					sorted.remove(in);
+					process.remove(ind);
+					
+				}else {
+					double stay = (curTime+p.getBurstTime()) - minArr;
+					g.setDur(stay);
+					process.get(ind).setBurstTime(p.getBurstTime() - stay);
+					curTime = (int) (curTime+stay);
+				}
+				ans.add(g);
+			}else curTime++;
 		}
 		return ans;
 	}
@@ -65,31 +89,55 @@ public class Priority {
 		for(int i = 0;i<data.size();i++) {
 			Process p = data.get(i);
 			if(p.getArrivalTime() <= timer &&
-			   Integer.valueOf(p.getPriority()) > priority) {
+			   p.getPriorityNumber() > priority) {
 				ans = i;
-				priority = Integer.valueOf(p.getPriority());
+				priority = p.getPriorityNumber();
 			}
 		}
-		//System.out.println(timer);
+		return ans;
+	}
+	public static ArrayList<Process> sortProcess(ArrayList<Process> process){
+		ArrayList<Process> ans = new ArrayList<>();
+		ArrayList<Process> data = process;
+		int ind = -1,max = 0;
+		double arr = 100000;
+		while(data.size() > 0) {
+			ind = -1;max = 0;arr = 100000;
+			for(int i=0;i<data.size();i++) {
+				Process p = data.get(i);
+				if(p.getPriorityNumber() > max) {
+					ind = i;
+					max = p.getPriorityNumber();
+					arr = p.getArrivalTime();
+				}else if(p.getPriorityNumber() == max && p.getArrivalTime() < arr) {
+					ind = i;
+					max = p.getPriorityNumber();
+					arr = p.getArrivalTime();
+				}
+			}
+			ans.add(data.get(ind));
+			data.remove(ind);
+		}
 		return ans;
 	}
 	public static void main(String args[]) {
-		Process p1 = new Process("2","1","3","r");
-		Process p2 = new Process("3","7","4","r");
-		Process p3 = new Process("6","7","2","r");
+		Process p1 = new Process("2","0","5","r");
+		Process p2 = new Process("3","0","4","r");
+		Process p3 = new Process("6","4","2","r");
 		Process p4 = new Process("1","7","3","r");
-		Process p5 = new Process("7","6","1","r");
+		Process p5 = new Process("7","2","1","r");
 		ArrayList<Process> data = new ArrayList<>();
 		data.add(p1);
-		data.add(p3);
 		data.add(p2);
+		data.add(p3);
 		data.add(p5);
 		data.add(p4);
 
-		ArrayList<Process> ans = Priority.priorityNonPremmetive(data);
-		for(int i = 0;i<ans.size();i++) {
-			Process e = ans.get(i);
-			System.out.println(e.getID() + " Start at: " + e.getStartTime() + " Dur: " + e.getCurrentBurst());
+		ArrayList<Process> ansnp = Priority.pp(data);
+		for(int i = 0;i<ansnp.size();i++) {
+			Process e = ansnp.get(i);
+			System.out.println(e.getID() + " Start at: " + e.getStartTime() + " Dur: " + e.getDur());
+			//System.out.println(e.getID());
 		}
 	}
 }
