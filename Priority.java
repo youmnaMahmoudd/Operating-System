@@ -11,12 +11,14 @@ public class Priority {
 		int curTime = 0;
 		while(process.size() > 0) {
 			int ind = curProcess(curTime,process);
-			Process p = process.get(ind);
-			p.setCurrentBurst(String.valueOf(p.getBurstTime()));
-			p.setStartTime(curTime);
-			ans.add(p);
-			curTime+=p.getBurstTime();
-			process.remove(ind);
+			if(ind != -1) {
+				Process p = process.get(ind);
+				p.setCurrentBurst(String.valueOf(p.getBurstTime()));
+				p.setStartTime(curTime);
+				ans.add(p);
+				curTime+=p.getBurstTime();
+				process.remove(ind);
+			}else curTime ++;
 		}
 		return ans;
 	}
@@ -72,11 +74,11 @@ public class Priority {
 		return ans;
 	}
 	public static void main(String args[]) {
-		Process p1 = new Process("2","0","5","r");
-		Process p2 = new Process("3","0","4","r");
-		Process p3 = new Process("6","4","2","r");
+		Process p1 = new Process("2","1","3","r");
+		Process p2 = new Process("3","7","4","r");
+		Process p3 = new Process("6","7","2","r");
 		Process p4 = new Process("1","7","3","r");
-		Process p5 = new Process("7","2","1","r");
+		Process p5 = new Process("7","6","1","r");
 		ArrayList<Process> data = new ArrayList<>();
 		data.add(p1);
 		data.add(p3);
@@ -84,7 +86,7 @@ public class Priority {
 		data.add(p5);
 		data.add(p4);
 
-		ArrayList<Process> ans = Priority.priorityPremmetive(data);
+		ArrayList<Process> ans = Priority.priorityNonPremmetive(data);
 		for(int i = 0;i<ans.size();i++) {
 			Process e = ans.get(i);
 			System.out.println(e.getID() + " Start at: " + e.getStartTime() + " Dur: " + e.getCurrentBurst());
