@@ -1,6 +1,8 @@
 package osProject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 public class Priority {
 	
@@ -120,18 +122,78 @@ public class Priority {
 		}
 		return ans;
 	}
+	public static ArrayList<Process> modify(ArrayList<Process> data){
+		ArrayList<Process> ans = new ArrayList<>();
+		for(int i=0;i<data.size();i++) {
+			Process p = data.get(i);
+			int startTime = p.getStartTime(); 
+			int dur = (int)p.getDur();
+			
+			for(int j = startTime;j<(dur+startTime);j++) {
+				Process g = new Process(p.getID(),p.getArrivalTime(),
+						p.getBurstTime(),p.getPriority(),
+						p.getColor());
+				g.setStartTime(j);
+				g.setDur(1);
+				ans.add(g);
+			}
+		}
+		return ans;
+	}
+	public static double turnAround(ArrayList<Process> data) {
+		double ans = 0.0;
+		HashMap<Integer,Integer> m = new HashMap<>();
+		for(int i=0;i<data.size();i++) {
+			Process p = data.get(i);
+			String id = p.getID();
+			int startTime = p.getStartTime(); 
+			int dur = (int)p.getDur();
+			m.put(Integer.parseInt(id), startTime+dur - (int)p.getArrivalTime());
+		}
+		double num = 0;
+		for(Entry<Integer, Integer> e : m.entrySet()) {
+			num++;
+			ans+=e.getValue();
+		}
+		return ans / num;
+	}
+	public static double waitingTime(ArrayList<Process> data) {
+		double ans = 0.0;
+		HashMap<Integer,Integer> m = new HashMap<>();
+		HashMap<Integer,Integer> count = new HashMap<>();
+		for(int i=0;i<data.size();i++) {
+			Process p = data.get(i);
+			String id = p.getID();
+			int startTime = p.getStartTime(); 
+			int dur = (int)p.getDur();
+			m.put(Integer.parseInt(id), startTime+dur - (int)p.getArrivalTime());
+			if(count.get(Integer.parseInt(id)) != null)
+				count.put(Integer.parseInt(id), count.get(Integer.parseInt(id)) + 1);
+			else count.put(Integer.parseInt(id),1);
+		}
+		double num = 0;
+		for(Entry<Integer, Integer> e : m.entrySet()) {
+			num++;
+			ans+=e.getValue()-count.get(e.getKey());
+		}
+		return ans / num;
+	}
 	public static void main(String args[]) {
 		Process p1 = new Process("2","0","5","r");
 		Process p2 = new Process("3","0","4","r");
 		Process p3 = new Process("6","4","2","r");
 		Process p4 = new Process("1","7","3","r");
 		Process p5 = new Process("7","2","1","r");
+		/*Process p1 = new Process("2","0","0","r");
+        Process p2 = new Process("3","0","0","r");
+        Process p3 = new Process("6","0","0","r");
+        Process p4 = new Process("1","0","0","r");*/
 		ArrayList<Process> data = new ArrayList<>();
 		data.add(p1);
 		data.add(p2);
 		data.add(p3);
-		data.add(p5);
 		data.add(p4);
+		data.add(p5);
 
 		ArrayList<Process> ansnp = Priority.pp(data);
 		for(int i = 0;i<ansnp.size();i++) {
@@ -139,5 +201,14 @@ public class Priority {
 			System.out.println(e.getID() + " Start at: " + e.getStartTime() + " Dur: " + e.getDur());
 			//System.out.println(e.getID());
 		}
+		System.out.println("----------------");
+		ArrayList<Process> m = Priority.modify(ansnp);
+		for(int i = 0;i<m.size();i++) {
+			Process e = m.get(i);
+			System.out.println(e.getID() + " Start at: " + e.getStartTime() + " Dur: " + e.getDur());
+		}
+		System.out.println("----------------");
+		System.out.println(Priority.turnAround(m));
+		System.out.println(Priority.waitingTime(m));
 	}
 }
