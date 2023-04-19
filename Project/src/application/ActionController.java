@@ -3,6 +3,10 @@ import javafx.concurrent.Task;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.scene.layout.HBox;
 
@@ -17,6 +21,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import application.GanttChart.ExtraData;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -49,6 +54,9 @@ public class ActionController  implements Initializable {
 	@FXML Label QT;
 	@FXML Label pr;
 	@FXML  HBox hbox = new HBox();
+	Timeline timeline= new Timeline();
+	private int elapsed = 0;
+
 	private Stage stage;
 	private Scene scene;
 	private Parent root;
@@ -60,8 +68,9 @@ public class ActionController  implements Initializable {
 	String machine =   "Processes" ;
 	XYChart.Series series1 = new XYChart.Series();
 	Scheduler fcfs = new FirstComeFirstServe();
-
-	RoundRobin roundRobin;
+	SJF sjf=new SJF();
+	ArrayList<Process> shortestJobFirst=new ArrayList<Process>();
+	RoundRobin roundRobin = new RoundRobin(x.getQv());
 	ArrayList<Things> RRprocess = new ArrayList<Things>();
 	//Function to choose color
 
@@ -117,38 +126,65 @@ public class ActionController  implements Initializable {
 
 	//Add new process to table
 	public void Add() throws IOException, InterruptedException {
-		Process p;
-		//FCFS
-		if(x.type==3) {
-			p=new Process(ATtext.getText(),BTtext.getText(),choice());
-			if(!fcfs.getRows().contains(p)) fcfs.add(p);
+	    Process p;
 
-			Platform.runLater(() -> {
-				tableview.getItems().add(p);
-			});
+	    if(x.type==1||x.type==2||x.type==4||x.type==5) {
+	    p=new Process(Ptext.getText(),ATtext.getText(),BTtext.getText(),choice());
+        data.add(p);
+	    tableview.getItems().add(p);
+	    if(elapsed>0)   {
+	    	   timeline.stop();
+	    
+	    } 
+	    }else if(x.type==3) {
+	        p=new Process(ATtext.getText(),BTtext.getText(),choice());
+	        if(!fcfs.getRows().contains(p))
+	            fcfs.add(p);
+	        Platform.runLater(() -> {
+	            tableview.getItems().add(p);
+	        });
+	    }
 
-		}
-		//Round Robin
-		else if(x.type==6) {
-			p=new Process(Ptext.getText(),ATtext.getText(),BTtext.getText(),choice());
-
-			roundRobin = new RoundRobin(data,x.Qv);
-			roundRobin.add(p);
-			System.out.println("RR"+roundRobin.processes);
-
-			Platform.runLater(() -> {
-				tableview.getItems().add(p);
-			});
-
-		}
+	    //Round Robin
+	    else if(x.type==6) {
+	        p=new Process(Ptext.getText(),ATtext.getText(),BTtext.getText(),choice());
+	     
+	        System.out.println(roundRobin.getProcesses().size());
+	        data.add(p);
+   	        roundRobin.SetQ(x.getQv());
+	        roundRobin.getProcesses().add(p);
+	        tableview.getItems().add(p);
+	       if(elapsed>0)   {
+	    	   timeline.stop();
+	    //	  roundRobin = new RoundRobin(x.getQv());
+	    	   for(int i=0;i<data.size()-1;i++) {
+	    		   System.out.println(data.get(i).getBurstTime()+"  "+data.get(i).getColor());
+	    	   }
+	       } 
+	       
+	    }
 	}
 
-
-
+	ArrayList<Process> priority=new ArrayList<Process>();
 	//Basic Display process on chart function
 	public void Basicact(int n) throws InterruptedException{
-		//If FCFS
-		if(x.type==3) {
+		if(x.type==1||x.type==2) {
+			series1 = new XYChart.Series();
+			for (int i = 0; i < n; i++)
+			{
+				Process e = shortestJobFirst.get(i);
+				int x=(int) e.getDur();
+				series1.getData().addAll(new XYChart.Data(e.getStartTime(), machine,new ExtraData(x, shortestJobFirst.get(i).getColor())));
+				
+					if(!lineChart.getData().contains(series1))
+						lineChart.getData().addAll(series1);
+				
+				
+					System.out.println(e.getColor() + " Start at: " + e.getStartTime() + " Dur: " + e.getCurrentBurst());
+				
+				}
+		}
+		else if(x.type==3) {
 			for (int i = 0; i < n; i++)
 			{
 				series1 = new XYChart.Series();
@@ -158,25 +194,58 @@ public class ActionController  implements Initializable {
 
 				if (i == n - 1) {System.out.println("finish"+timeline.get(i).getFinishTime());}
 			}
-			fcfs.getRows().clear();
-
-			//Still need update
-			displayAvTurnAround(String.valueOf(fcfs.getAverageTurnAroundTime()));
-			displayAVwaiting(String.valueOf(fcfs.getAverageWaitingTime()));
+//			fcfs.getRows().clear();
+//
+//			//Still need update
+//			displayAvTurnAround(String.valueOf(fcfs.getAverageTurnAroundTime()));
+//			displayAVwaiting(String.valueOf(fcfs.getAverageWaitingTime()));
 		}
+		else if(x.type==4) {
+			series1 = new XYChart.Series();
+			for (int i = 0; i < n; i++)
+			{
+				Process e = priority.get(i);
+				int x=(int) e.getDur();
+				series1.getData().addAll(new XYChart.Data(e.getStartTime(), machine,new ExtraData(x, priority.get(i).getColor())));
+				
+					if(!lineChart.getData().contains(series1))
+						lineChart.getData().addAll(series1);
+				
+				
+					System.out.println(e.getColor() + " Start at: " + e.getStartTime() + " Dur: " + e.getCurrentBurst());
+				
+				}
+		}
+		else if(x.type==5) {
+			series1 = new XYChart.Series();
+			for (int i = 0; i < n; i++)
+			{
+				Process e = priority.get(i);
+				int x=(int) e.getDur();
+				series1.getData().addAll(new XYChart.Data(e.getStartTime(), machine,new ExtraData(x, priority.get(i).getColor())));
+			
+					if(!lineChart.getData().contains(series1))
+						lineChart.getData().addAll(series1);
+				
+				
+					System.out.println(e.getColor() + " Start at: " + e.getStartTime() + " Dur: " + e.getCurrentBurst());
+				
+				}
+			}
 		//RR
 		else if(x.type==6) {
 			series1 = new XYChart.Series();
 			for (int i = 0; i < n; i++) {
+				
 				series1.getData().addAll(new XYChart.Data(RRprocess.get(i).start, machine,new ExtraData( RRprocess.get(i).end-RRprocess.get(i).start, RRprocess.get(i).color)));
-				Platform.runLater(() -> {
+				
 					if(!lineChart.getData().contains(series1))
 						lineChart.getData().addAll(series1);
-				});
+				
 			}
 
-			//roundRobin.processes.clear();
-			//displayAvTurnAround(String.valueOf(roundRobin.getAverageTurnAroundTime()));
+			
+		//	displayAvTurnAround(String.valueOf(roundRobin.getAverageTurnAroundTime()));
 		}
 
 	}
@@ -184,95 +253,164 @@ public class ActionController  implements Initializable {
 
 	@FXML
 	//Man function to display dynamic and static charts.
-	public void start() {
+	public void start() throws InterruptedException {
+		
+	    
+		if(x.type==1) {
+	    	
+	    	shortestJobFirst=sjf.shortestJobFirstPreemptive(data);
+	    	
+	    	if(Flive==0) {
+	    		Basicact(shortestJobFirst.size());
+	    	} else {
+	    		
+              
+	    		 timeline = new Timeline(new KeyFrame(Duration.seconds(1), e ->{
+	    			 
+	 			        if(elapsed < shortestJobFirst.size()) {	 try {
+							Basicact(++elapsed);
+						} catch (InterruptedException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+	 		        	
+	 	 		}}));
+	 		timeline.setCycleCount(Animation.INDEFINITE);
+	 		timeline.play();
+	    	 }
+	    	
+	    }
+		else if(x.type==2) {
+	    	
+	    	shortestJobFirst=sjf.shortestJobFirstNonPreemptive(data);
+	    	
+	    	if(Flive==0) {
+	    		Basicact(shortestJobFirst.size());
+	    	} else {
+	    		
+              
+	    		 timeline = new Timeline(new KeyFrame(Duration.seconds(1), e ->{
+	    			 
+	 			        if(elapsed < shortestJobFirst.size()) {	 try {
+							Basicact(++elapsed);
+						} catch (InterruptedException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+	 		        	
+	 	 		}}));
+	 		timeline.setCycleCount(Animation.INDEFINITE);
+	 		timeline.play();
+	    	 }
+	    	
+	    }
 		//FCFS
-		if(x.type==3) {
-			Task<Void> task = new Task<Void>() {
-				@Override
-				protected Void call() throws Exception {
-					//if not live (static): invoke the function once with all data.
-					if (Flive == 0) {
-						fcfs.process();
-						Basicact(fcfs.getTimeline().size());
-					}
-					// if Live (dynamic): invoke the function every time unit and update it.
-					else {
-						//Time passed (to be displayed)
-						int elapsed = 0;
-						fcfs.process();
-						while (elapsed < fcfs.getTimeline().size()) {
-							elapsed++;
-							//To be put in the thread
-							final int elapsedFinal = elapsed;
-							Platform.runLater(() -> {
-								try {
-									Basicact(elapsedFinal);
-								} catch (InterruptedException e) {
-									throw new RuntimeException(e);
-								}
-
-							});
-							//Wait one second between each
-							Thread.sleep(1000);
+		else if(x.type==3) {
+	        Task<Void> task = new Task<Void>() {
+	            @Override
+	            protected Void call() throws Exception {
+	                //if not live (static): invoke the function once with all data.
+	                if (Flive == 0) {
+	                    fcfs.process();
+	                    Basicact(fcfs.getTimeline().size());
+	                }
+	                // if Live (dynamic): invoke the function every time unit and update it.
+	                else {
+	                    //Time passed (to be displayed)
+	                    int elapsed = 0;
+	                    fcfs.process();
+	                    while (elapsed < fcfs.getTimeline().size()) {
+	                        elapsed++;
+	                        //To be put in the thread
+	                        final int elapsedFinal = elapsed;
+	                        Platform.runLater(() -> {
+	                            try {
+	                                Basicact(elapsedFinal);
+	                            } catch (InterruptedException e) {
+	                                throw new RuntimeException(e);
+	                            }
+	                        });
+	                        //Wait one second between each
+	                        Thread.sleep(1000);
+	                    }
+	                }
+	                return null;
+	            }
+	        };
+	        Thread thread = new Thread(task);
+	        thread.setDaemon(true);
+	        thread.start();
+	    }
+	    else if(x.type==4) {
+	    	Priority P=new Priority();
+	    	priority=Priority.pp(data);
+	    	
+	    	if(Flive==0) {
+	    		Basicact(priority.size());
+	    	} else {
+	    		
+              
+	    		 timeline = new Timeline(new KeyFrame(Duration.seconds(1), e ->{
+	    			 
+	 			        if(elapsed < priority.size()) {	 try {
+							Basicact(++elapsed);
+						} catch (InterruptedException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
 						}
-					}
-					return null;
-				}
-			};
-			Thread thread = new Thread(task);
-			thread.setDaemon(true);
-			thread.start();
-		}
-		//RR
-		if(x.type==6) {
-			Task<Void> task6 = new Task<Void>() {
-				@Override
-				protected Void call() throws Exception {
-
-					//if not live (static): invoke the function once with all data.
-					if (Flive == 0) {
-						RRprocess=roundRobin.execute();
-						System.out.println(RRprocess.size());
-						Basicact(RRprocess.size());
-
-					}
-					// if Live (dynamic): invoke the function every time unit and update it.
-					else {
-						System.out.print("FLive is one");
-						//Time passed (to be displayed)
-						RRprocess=roundRobin.execute();
-						System.out.println("Size"+RRprocess.size());
-						int elapsed = 0;
-						while (elapsed <= RRprocess.size()) {
-
-							//To be put in the thread
-
-							System.out.print("e"+elapsed);
-							int finalElapsed = elapsed;
-							Platform.runLater(() -> {
-								try {
-									Basicact(finalElapsed);
-								} catch (InterruptedException e) {
-									throw new RuntimeException(e);
-								}
-
-							});
-							//Wait one second between each
-							elapsed++;
-							Thread.sleep(1000);
+	 		        	
+	 	 		}}));
+	 		timeline.setCycleCount(Animation.INDEFINITE);
+	 		timeline.play();
+	    	 }
+	    	
+	    }
+	    else if(x.type==5) {
+	    	Priority P=new Priority();
+	    	priority=Priority.priorityNonPremmetive(data);
+	    	 if(Flive==0) {
+		    		Basicact(priority.size());
+		    	} else {
+		    		
+	              
+		    		 timeline = new Timeline(new KeyFrame(Duration.seconds(1), e ->{
+		    			 
+		 			        if(elapsed < priority.size()) {	 try {
+								Basicact(++elapsed);
+							} catch (InterruptedException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+		 		        	
+		 	 		}}));
+		 		timeline.setCycleCount(Animation.INDEFINITE);
+		 		timeline.play();
+		    	 }
+	    }
+	    
+	    //Round Robin
+	    else if(x.type==6) {
+	    	 if (Flive == 0) {
+	    	RRprocess= roundRobin.execute();
+           Basicact(RRprocess.size());}
+	    	 else {
+                RRprocess= roundRobin.execute();
+              
+	    		 timeline = new Timeline(new KeyFrame(Duration.seconds(1), e ->{
+	    			 
+	 			        if(elapsed < RRprocess.size()) {	 try {
+							Basicact(++elapsed);
+						} catch (InterruptedException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
 						}
-						RRprocess.clear();
-					}
-					return null;
-				}
-			};
-			Thread thread = new Thread(task6);
-			thread.setDaemon(true);
-			thread.start();
-		}
-
+	 		        	
+	 	 		}}));
+	 		timeline.setCycleCount(Animation.INDEFINITE);
+	 		timeline.play();
+	    	 }
+	    }
 	}
-
 	// Both for setting the Table view
 	public ObservableList<Process>  getprocesses()
 	{

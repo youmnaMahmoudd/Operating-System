@@ -2,6 +2,8 @@ package application;
 
 
 import java.util.*;
+
+import application.Process;
 public class RoundRobin{
 
     public int q;
@@ -29,13 +31,7 @@ public class RoundRobin{
         this.q = q;
         System.out.print("q"+q);
     }
-    public void SetQ(int q) {this.q=q;}
-    public void add(Process process) {
-
-        processes.add(process);
-        timer=0;
-
-    }
+  
     public ArrayList<Things>  execute() throws InterruptedException {
         numberOfProcesses = processes.size();
         double [] bursts = new double[numberOfProcesses];
@@ -60,7 +56,7 @@ public class RoundRobin{
                 }
 
                 if ((int)processes.get(i).getBurstTime() > q && processes.get(i).isArrived()) {
-                    System.out.println("bigger than q");
+                    System.out.println(processes.get(i).getColor());
                     temp.setName(processes.get(i).getID());
                     temp.setColor(processes.get(i).getColor());
                     processes.get(i).setStarted(true);
@@ -75,7 +71,7 @@ public class RoundRobin{
                     processes.get(i).setActive(false);
                 }
                 else if (processes.get(i).getBurstTime() <= q && processes.get(i).getBurstTime() > 0 && processes.get(i).isArrived()) {
-                    System.out.println("less than q");
+                    System.out.println(processes.get(i).getColor());
                     temp.setName(processes.get(i).getID());
                     temp.setColor(processes.get(i).getColor());
                     processes.get(i).setStarted(true);
@@ -112,7 +108,7 @@ public class RoundRobin{
 
         AverageTurnAroundTime = (TotalTurnAround / numberOfProcesses);
         AverageWaitingTime = (TotalWaiting / numberOfProcesses);
-
+    
         return t;
     }
 
@@ -135,6 +131,9 @@ public class RoundRobin{
                 System.out.print(temp.getStart()+"("+temp.getColor()+")"+temp.getEnd()+" ");
         }
     }
-
+    public void SetQ(int q) {this.q=q;}
+    public ArrayList<Process> getProcesses() {
+		return processes;
+	}
 
 }

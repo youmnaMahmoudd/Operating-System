@@ -48,6 +48,6 @@
       <Label layoutX="387.0" layoutY="383.0" text="Burst time" />
       <Label layoutX="400.0" layoutY="426.0" text="Color" />
       <Label fx:id="pr" layoutX="400.0" layoutY="468.0" text="Priority" />
-      <Button layoutX="567.0" layoutY="430.0" mnemonicParsing="false" onAction="#act" prefHeight="25.0" prefWidth="68.0" text="Start" />
+      <Button layoutX="567.0" layoutY="430.0" mnemonicParsing="false" onAction="#start" prefHeight="25.0" prefWidth="68.0" text="Start" />
    </children>
 </AnchorPane>

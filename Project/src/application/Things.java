@@ -1,11 +1,18 @@
 package application;
 
+import java.util.ArrayList;
+
 public class Things {
 
 	int start;
 	int end;
 	String color;
 	String name;
+
+
+ 
+
+  
 
 public Things() {
 		

@@ -21,7 +21,7 @@ public class SampleController {
 	private Parent root;
 	@FXML RadioButton live;
 	@FXML TextField Quantumvalue;
-	static int Qv=0;
+	static int Qv;
 	static int Flive=0;
 
 	static int type=0;//To declare the scheduler
@@ -138,7 +138,7 @@ public class SampleController {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("Action.fxml"));
 		root = loader.load();
 
-		Qv=Integer.parseInt(Quantumvalue.getText());
+		setQv(Integer.parseInt(Quantumvalue.getText()));
 		ActionController scene2Controller = loader.getController();
 		String username="Round Robin";
 		scene2Controller.displayName(username);
@@ -148,5 +148,11 @@ public class SampleController {
 		scene = new Scene(root);
 		stage.setScene(scene);
 		stage.show();
+	}
+	public static int getQv() {
+		return Qv;
+	}
+	public static void setQv(int qv) {
+		Qv = qv;
 	}
 }
