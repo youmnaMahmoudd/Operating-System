@@ -76,7 +76,7 @@ public class Priority {
 					process.remove(ind);
 					
 				}else {
-					double stay = (curTime+p.getBurstTime()) - minArr;
+					double stay = minArr - curTime;
 					g.setDur(stay);
 					process.get(ind).setBurstTime(p.getBurstTime() - stay);
 					curTime = (int) (curTime+stay);
