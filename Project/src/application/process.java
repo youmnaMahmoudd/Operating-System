@@ -1,5 +1,6 @@
 package application;
 
+import java.util.ArrayList;
 
 public class Process {
 		static int counter = 0;
@@ -20,16 +21,6 @@ public class Process {
 		private int startTime = 0;
 		private double dur = 0;
 		
-	 	public int getStartTime() {
-			return startTime;
-		}public void setStartTime(int startTime) {
-			this.startTime = startTime;
-		}
-	 	public double getDur() {
-			return dur;
-		}public void setDur(double dur) {
-			this.dur = dur;
-		}
 		public Process(String ID,double arrivalTime,double burstTime,String priority,String color) {
 			this.ID = ID;
 			this.arrivalTime = arrivalTime;
@@ -57,19 +48,50 @@ public class Process {
 			color=c;
 			this.arrivalTime=Double.parseDouble(arrivaltime);
 			this.burstTime=Double.parseDouble(currentBurst);
-			this.ID=" "+counter+" ";
+			this.ID=""+counter+"";
 			this.arrivaltime = arrivaltime;
 			this.currentBurst = currentBurst;
 		}
 	    public Process(String color, double arrivalTime, double burstTime)
 	    {
-	    	this.ID=" "+counter+" ";
+	    	this.ID=""+counter+"";
 	        this.color = color;
 	        this.arrivalTime = arrivalTime;
 	        this.burstTime = burstTime;
+	        
 	    }
- 
-		   public String getName() {
+	   public void compare(ArrayList<Things> processes,int i) {
+		//   System.out.println(x);
+		   for(int j=0;j<i;j++) {
+			   if(processes.get(j).getName().equals(this.getID())) {
+		           if(this.getBurstTime()>0) 
+		        	   this.setBurstTime(this.getBurstTime()-(processes.get(j).getEnd()-processes.get(j).getStart()));
+				System.out.println(this.getColor() + " Start at: " + this.getArrivalTime() + " BTime: " + this.getBurstTime());
+			
+				
+				   }
+		   }
+		  
+	   }
+//	   @Override
+//	    public Object clone() throws CloneNotSupportedException {
+//	        // Perform a shallow copy
+//	        Process clone = (Process) super.clone();
+//	        clone.ID = ID;
+//	        clone.arrivalTime = arrivalTime;
+//	        clone.burstTime = burstTime;
+//	        clone.color = color;
+//	        clone.priorityNumber=Integer.parseInt(priority);
+//	        clone.priority = priority;
+//	        clone.arrivaltime = String.valueOf(arrivalTime);
+//	        clone.currentBurst = String.valueOf(burstTime);
+//	        // Make a deep copy of the myOtherData object
+//	        clone.myOtherData = (MyOtherClass) myOtherData.clone();
+//
+//	        return clone;
+//	    }
+	
+		public String getName() {
 		        return ID;
 		    }
  
@@ -152,7 +174,7 @@ public class Process {
 		return ID;
 	}
 	public void setID(String iD) {
-		ID = counter+"0";
+		ID = counter+"";
 	}
  
  
@@ -180,6 +202,16 @@ public class Process {
 	}
 	public void setCurrentBurst(String currentBurst) {
 		this.currentBurst = currentBurst;
+	}
+ 	public int getStartTime() {
+		return startTime;
+	}public void setStartTime(int startTime) {
+		this.startTime = startTime;
+	}
+ 	public double getDur() {
+		return dur;
+	}public void setDur(double dur) {
+		this.dur = dur;
 	}
  
  

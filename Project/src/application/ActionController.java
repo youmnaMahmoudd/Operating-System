@@ -80,8 +80,12 @@ public class ActionController  implements Initializable {
 	}
 	// set the gantt chart
 	public void Action() throws IOException {
-
-		Color paint = new Color(0.5059, 0.6471, 0.7725, 1.0);
+		 xAxis = new NumberAxis();
+		 yAxis = new CategoryAxis();
+	     lineChart = new GanttChart<Number,String>(xAxis,yAxis);
+         machine =   "Processes" ;
+		 XYChart.Series series1 = new XYChart.Series();
+		 Color paint = new Color(0.5059, 0.6471, 0.7725, 1.0);
 
 		xAxis.setLabel("");
 		xAxis.setTickLabelFill(paint);
@@ -130,6 +134,7 @@ public class ActionController  implements Initializable {
 
 	    if(x.type==1||x.type==2||x.type==4||x.type==5) {
 	    p=new Process(Ptext.getText(),ATtext.getText(),BTtext.getText(),choice());
+	 //   Process p2=new Process(Ptext.getText(),ATtext.getText(),BTtext.getText(),choice());
         data.add(p);
 	    tableview.getItems().add(p);
 	    if(elapsed>0)   {
@@ -148,9 +153,9 @@ public class ActionController  implements Initializable {
 	    //Round Robin
 	    else if(x.type==6) {
 	        p=new Process(Ptext.getText(),ATtext.getText(),BTtext.getText(),choice());
-	     
+	        Process p2=new Process(choice(),Double.parseDouble(ATtext.getText()),Double.parseDouble(BTtext.getText()));
 	        System.out.println(roundRobin.getProcesses().size());
-	        data.add(p);
+	        data.add(p2);
    	        roundRobin.SetQ(x.getQv());
 	        roundRobin.getProcesses().add(p);
 	        tableview.getItems().add(p);
@@ -158,8 +163,19 @@ public class ActionController  implements Initializable {
 	    	   timeline.stop();
 	    //	  roundRobin = new RoundRobin(x.getQv());
 	    	   for(int i=0;i<data.size()-1;i++) {
-	    		   System.out.println(data.get(i).getBurstTime()+"  "+data.get(i).getColor());
+	    		 data.get(i).compare(RRprocess,elapsed);  
+	    		roundRobin.getProcesses().add( data.get(i)); 
 	    	   }
+	    	   for(int i=elapsed;i<RRprocess.size();i++) {
+	    		   RRprocess.get(i).setEnd(0);
+	    		   RRprocess.get(i).setStart(0);
+	    	   }
+	    	
+	   
+		    	  roundRobin.setTimer(elapsed+1);
+		    	  elapsed= RRprocess.size();
+	    	 
+	    	   
 	       } 
 	       
 	    }
@@ -210,10 +226,7 @@ public class ActionController  implements Initializable {
 				
 					if(!lineChart.getData().contains(series1))
 						lineChart.getData().addAll(series1);
-				
-				
-					System.out.println(e.getColor() + " Start at: " + e.getStartTime() + " Dur: " + e.getCurrentBurst());
-				
+
 				}
 		}
 		else if(x.type==5) {
@@ -227,8 +240,8 @@ public class ActionController  implements Initializable {
 					if(!lineChart.getData().contains(series1))
 						lineChart.getData().addAll(series1);
 				
-				
-					System.out.println(e.getColor() + " Start at: " + e.getStartTime() + " Dur: " + e.getCurrentBurst());
+					
+				System.out.println(e.getColor() + " Start at: " + e.getStartTime() + " Btime: " + e.getBurstTime());
 				
 				}
 			}
@@ -236,12 +249,15 @@ public class ActionController  implements Initializable {
 		else if(x.type==6) {
 			series1 = new XYChart.Series();
 			for (int i = 0; i < n; i++) {
-				
-				series1.getData().addAll(new XYChart.Data(RRprocess.get(i).start, machine,new ExtraData( RRprocess.get(i).end-RRprocess.get(i).start, RRprocess.get(i).color)));
+				int c=RRprocess.get(i).end-RRprocess.get(i).start;
+			
+				series1.getData().addAll(new XYChart.Data(RRprocess.get(i).getStart(), machine,new ExtraData( c, RRprocess.get(i).color)));
 				
 					if(!lineChart.getData().contains(series1))
 						lineChart.getData().addAll(series1);
 				
+			System.out.println( elapsed+" <-The output time "+RRprocess.get(i).start);			
+					
 			}
 
 			
@@ -391,7 +407,8 @@ public class ActionController  implements Initializable {
 	    //Round Robin
 	    else if(x.type==6) {
 	    	 if (Flive == 0) {
-	    	RRprocess= roundRobin.execute();
+	    	//RRprocess=new ArrayList<Things>();
+	    	RRprocess=roundRobin.execute();
            Basicact(RRprocess.size());}
 	    	 else {
                 RRprocess= roundRobin.execute();

@@ -33,6 +33,7 @@ public class RoundRobin{
     }
   
     public ArrayList<Things>  execute() throws InterruptedException {
+    	//timer=0;
         numberOfProcesses = processes.size();
         double [] bursts = new double[numberOfProcesses];
 
@@ -93,12 +94,13 @@ public class RoundRobin{
                     timer += 1;
                     counter=0;
                 }
+                if(temp.getStart()!=temp.getEnd())
                 t.add(temp);
             }
         } while (totalBurst != 0);
 
         AverageTurnAroundTime=0; AverageWaitingTime=0; TotalTurnAround=0; TotalWaiting=0;
-        System.out.println("Process\t\t\tWaitingTime\t\t\tTurnAroundTime");
+        
         for (int i = 0; i < numberOfProcesses; i++) {
             double w = processes.get(i).getWaitingTime();
             double t = processes.get(i).getTurnAroundTime();
@@ -112,7 +114,13 @@ public class RoundRobin{
         return t;
     }
 
-    public double getAverageTurnAroundTime() {
+    public static int getTimer() {
+		return timer;
+	}
+	public static void setTimer(int timer) {
+		RoundRobin.timer = timer;
+	}
+	public double getAverageTurnAroundTime() {
         return AverageTurnAroundTime;
     }
     public void setAverageTurnAroundTime(double averageTurnAroundTime) {
@@ -128,8 +136,9 @@ public class RoundRobin{
     public void print() {
         for(Things temp:t) {
             if(temp.getStart()!=temp.getEnd())
-                System.out.print(temp.getStart()+"("+temp.getColor()+")"+temp.getEnd()+" ");
+                System.out.println(temp.getStart()+"("+temp.getColor()+")"+temp.getEnd()+" ");
         }
+        System.out.println("--------------------------------");
     }
     public void SetQ(int q) {this.q=q;}
     public ArrayList<Process> getProcesses() {
