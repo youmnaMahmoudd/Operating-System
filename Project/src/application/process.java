@@ -31,6 +31,18 @@ public class Process {
 			this.arrivaltime = String.valueOf(arrivalTime);
 			this.currentBurst = String.valueOf(burstTime);
 		}
+
+		public Process(String ID,double arrivalTime,double burstTime,String color) {
+			
+			this.ID = ID;
+			this.arrivalTime = arrivalTime;
+			this.burstTime = burstTime;
+			this.color = color;
+			this.priorityNumber=Integer.parseInt(priority);
+			this.priority = priority;
+			this.arrivaltime = String.valueOf(arrivalTime);
+			this.currentBurst = String.valueOf(burstTime);
+		}
 		public Process(String priority, String arrivaltime, String currentBurst,String c) {
 			counter++;
 			color=c;
@@ -65,31 +77,46 @@ public class Process {
 		   for(int j=0;j<i;j++) {
 			   if(processes.get(j).getName().equals(this.getID())) {
 		           if(this.getBurstTime()>0) 
-		        	   this.setBurstTime(this.getBurstTime()-(processes.get(j).getEnd()-processes.get(j).getStart()));
-				System.out.println(this.getColor() + " Start at: " + this.getArrivalTime() + " BTime: " + this.getBurstTime());
+		        	   this.setBurstTime(this.getBurstTime()-1);
+			//	System.out.println(this.getColor() + " IN process Start at: " + this.getArrivalTime() + " BTime: " + this.getBurstTime());
 			
 				
 				   }
 		   }
 		  
 	   }
-//	   @Override
-//	    public Object clone() throws CloneNotSupportedException {
-//	        // Perform a shallow copy
-//	        Process clone = (Process) super.clone();
-//	        clone.ID = ID;
-//	        clone.arrivalTime = arrivalTime;
-//	        clone.burstTime = burstTime;
-//	        clone.color = color;
-//	        clone.priorityNumber=Integer.parseInt(priority);
-//	        clone.priority = priority;
-//	        clone.arrivaltime = String.valueOf(arrivalTime);
-//	        clone.currentBurst = String.valueOf(burstTime);
-//	        // Make a deep copy of the myOtherData object
-//	        clone.myOtherData = (MyOtherClass) myOtherData.clone();
-//
-//	        return clone;
-//	    }
+	   public static ArrayList<Process> modify(ArrayList<Process> data){
+			ArrayList<Process> ans = new ArrayList<>();
+			for(int i=0;i<data.size();i++) {
+				Process p = data.get(i);
+				int startTime = p.getStartTime(); 
+				int dur = (int)p.getDur();
+				
+				for(int j = startTime;j<(dur+startTime);j++) {
+					Process g = new Process(p.getID(),p.getArrivalTime(),
+							p.getBurstTime(),p.getPriority(),
+							p.getColor());
+					g.setStartTime(j);
+					g.setDur(1);
+					ans.add(g);
+				}
+			}
+			return ans;
+		}
+	   public void compareP(ArrayList<Process> processes,int i) {
+			//   System.out.println(x);
+			   for(int j=0;j<i;j++) {
+				   if(processes.get(j).getID().equals(this.getID())) {
+					//	System.out.println(this.getColor() + " Start at: " + this.getArrivalTime() + " BTime: " + this.getBurstTime());
+
+					   if(this.getBurstTime()>0) {
+			        	   this.setBurstTime(this.getBurstTime()-1);
+
+			           } 
+				   }
+			   }
+			  
+		   }
 	
 		public String getName() {
 		        return ID;

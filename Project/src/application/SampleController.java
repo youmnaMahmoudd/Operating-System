@@ -49,6 +49,8 @@ public class SampleController {
 		scene2Controller.Action();
 		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		scene = new Scene(root);
+		String css1 = this.getClass().getResource("application.css").toExternalForm();
+		scene.getStylesheets().add(css1);
 		String css = this.getClass().getResource("QV.css").toExternalForm();
 		scene.getStylesheets().add(css);
 
@@ -68,6 +70,8 @@ public class SampleController {
 		scene2Controller.Action();
 		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		scene = new Scene(root);
+		String css1 = this.getClass().getResource("application.css").toExternalForm();
+		scene.getStylesheets().add(css1);
 		String css = this.getClass().getResource("QV.css").toExternalForm();
 		scene.getStylesheets().add(css);
 		stage.setScene(scene);
@@ -144,6 +148,8 @@ public class SampleController {
 		scene2Controller.displayName(username);
 		scene2Controller.displayQt(Quantumvalue.getText());
 		scene2Controller.Action();
+		String css = this.getClass().getResource("application.css").toExternalForm();
+		scene.getStylesheets().add(css);
 		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		scene = new Scene(root);
 		stage.setScene(scene);

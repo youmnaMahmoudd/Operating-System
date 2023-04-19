@@ -127,4 +127,30 @@ public class SJF {
 		}
 		return ans;
 	}
+	public static ArrayList<Process> modify(ArrayList<Process> data){
+		ArrayList<Process> ans = new ArrayList<>();
+		for(int i=0;i<data.size();i++) {
+			Process p = data.get(i);
+			int startTime = p.getStartTime(); 
+			int dur = (int)p.getDur();
+			
+			for(int j = startTime;j<(dur+startTime);j++) {
+				Process g = new Process(p.getID(),p.getArrivalTime(),
+						p.getBurstTime(),p.getPriority(),
+						p.getColor());
+				g.setStartTime(j);
+				g.setDur(1);
+				ans.add(g);
+			}
+		}
+		return ans;
+	}
+public void print(ArrayList<Process> m) {
+		
+		for(int i = 0;i<m.size();i++) {
+			Process e = m.get(i);
+			System.out.println(e.getID() + " Start at: " + e.getStartTime() + " Dur: " + e.getDur());
+		}
+		System.out.println("--------------------");
+	}
 }

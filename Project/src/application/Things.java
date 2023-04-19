@@ -36,6 +36,12 @@ public Things() {
 	public int getStart() {
 		return start;
 	}
+	public Things(int start, int end, String color,String name) {
+		this.name=name;
+		this.start = start;
+		this.end = end;
+		this.color = color;
+	}
 	public void setStart(int start) {
 		this.start = start;
 	}

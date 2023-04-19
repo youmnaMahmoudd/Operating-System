@@ -134,15 +134,35 @@ public class RoundRobin{
     }
 
     public void print() {
-        for(Things temp:t) {
+    	ArrayList<Things> ans = modify(t);
+        for(Things temp:ans) {
             if(temp.getStart()!=temp.getEnd())
                 System.out.println(temp.getStart()+"("+temp.getColor()+")"+temp.getEnd()+" ");
         }
         System.out.println("--------------------------------");
     }
-    public void SetQ(int q) {this.q=q;}
+    public void setProcesses(ArrayList<Process> processes) {
+		this.processes = processes;
+	}
+	public void SetQ(int q) {this.q=q;}
     public ArrayList<Process> getProcesses() {
 		return processes;
+	}
+    public static ArrayList<Things> modify(ArrayList<Things> data){
+		ArrayList<Things> ans = new ArrayList<>();
+		for(int i=0;i<data.size();i++) {
+			Things p = data.get(i);
+			int startTime = p.getStart(); 
+			int dur = p.getEnd()-p.getStart(); 
+			
+			for(int j = startTime;j<(dur+startTime);j++) {
+				Things g = new Things(p.getStart(),p.getEnd(),p.getColor(),p.getName());
+				g.setStart(j);
+				g.setEnd(j+1);
+				ans.add(g);
+			}
+		}
+		return ans;
 	}
 
 }
