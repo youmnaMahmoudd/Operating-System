@@ -44,11 +44,6 @@ public class SJF {
 		int curTime = 0;
 		while(process.size() > 0) {
 			sorted=sortProcess(sorted);
-//			for(int i = 0;i<sorted.size();i++) {
-//				Process e = sorted.get(i);
-////				System.out.println(e.getID() + " Start at: " + e.getStartTime() + " Dur: " + e.getDur());
-//				System.out.println(e.getID());
-//			}
 			int ind = curProcess(curTime,process);
 			double minArr = 100000.0;
 			int in = 0;
