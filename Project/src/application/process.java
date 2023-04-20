@@ -64,6 +64,15 @@ public class Process {
 			this.arrivaltime = arrivaltime;
 			this.currentBurst = currentBurst;
 		}
+	public Process(double arrivaltime, double currentBurst,String c) {
+		counter++;
+		color=c;
+		this.arrivalTime=arrivaltime;
+		this.burstTime=currentBurst;
+		this.ID=""+counter+"";
+		this.arrivaltime = String.valueOf(arrivaltime);
+		this.currentBurst = String.valueOf(currentBurst);
+	}
 	    public Process(String color, double arrivalTime, double burstTime)
 	    {
 	    	this.ID=""+counter+"";

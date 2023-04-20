@@ -1,5 +1,5 @@
 package application;
-import javafx.concurrent.Task;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
@@ -22,7 +22,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import application.GanttChart.ExtraData;
+import com.example.demo.GanttChart.ExtraData;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -34,11 +34,14 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 
+import static com.example.demo.Process.*;
+
 public class ActionController  implements Initializable {
 	SampleController x;
 	@FXML	Label nameLabel;
 	@FXML	Label nameLabel1;
 	@FXML	Label nameLabel2;
+	@FXML  Label  AvgT1;
 	@FXML TableView<Process> tableview;
 	@FXML TableColumn<Process,String> AT;
 	@FXML TableColumn<Process,String> P;
@@ -81,12 +84,12 @@ public class ActionController  implements Initializable {
 	}
 	// set the gantt chart
 	public void Action() throws IOException {
-		 xAxis = new NumberAxis();
-		 yAxis = new CategoryAxis();
-	     lineChart = new GanttChart<Number,String>(xAxis,yAxis);
-         machine =   "Processes" ;
-		 XYChart.Series series1 = new XYChart.Series();
-		 Color paint = new Color(0.5059, 0.6471, 0.7725, 1.0);
+		xAxis = new NumberAxis();
+		yAxis = new CategoryAxis();
+		lineChart = new GanttChart<Number,String>(xAxis,yAxis);
+		machine =   "Processes" ;
+		XYChart.Series series1 = new XYChart.Series();
+		Color paint = new Color(0.5059, 0.6471, 0.7725, 1.0);
 
 		xAxis.setLabel("");
 		xAxis.setTickLabelFill(paint);
@@ -121,6 +124,10 @@ public class ActionController  implements Initializable {
 	public void displayAVwaiting(String username) {
 		nameLabel1.setText(username );
 	}
+
+	public void displayElapsed(String username) {
+		AvgT1.setText(username );
+	}
 	public void displayAvTurnAround(String username) {
 		nameLabel2.setText(username );
 	}
@@ -152,7 +159,6 @@ public class ActionController  implements Initializable {
 			p=new Process(ATtext.getText(),BTtext.getText(),choice());
 			if(!fcfs.getRows().contains(p))
 				fcfs.add(p);
-
 			tableview.getItems().add(p);
 
 		}
@@ -226,14 +232,17 @@ public class ActionController  implements Initializable {
 		else if(x.type==3) {
 			series1 = new XYChart.Series();
 			List<Event> timeline = fcfs.getTimeline();
+			int e=1;
 			System.out.println("size of time line before Acsses"+fcfs.getTimeline().size());
 			for (int i = 0; i < n; i++)
 			{
+				displayElapsed(String.valueOf(e));
 				System.out.println("fcfs size"+fcfs.getRows().size());
 				System.out.println("processname"+timeline.get(i).getProcessName());
 				series1.getData().addAll(new XYChart.Data((int)timeline.get(i).getStartTime(), machine, new ExtraData((int)(timeline.get(i).getFinishTime()-timeline.get(i).getStartTime()),fcfs.getRow(timeline.get(i).getProcessName()).color)));
 				if(!lineChart.getData().contains(series1)) lineChart.getData().addAll(series1);
 				if (i == n - 1) {System.out.println("finish"+timeline.get(i).getFinishTime());}
+				e++;
 			}
 			if (timeline.size() == n) timeline.clear();
 
@@ -304,7 +313,6 @@ public class ActionController  implements Initializable {
 	//Man function to display dynamic and static charts.
 	public void start() throws InterruptedException {
 
-
 		if(x.type==1) {
 			shortestJobFirst=new ArrayList<Process>();
 			shortestJobFirst=sjf.modify(sjf.shortestJobFirstPreemptive(data));
@@ -358,6 +366,8 @@ public class ActionController  implements Initializable {
 		else if(x.type==3) {
 			//if not live (static): invoke the function once with all data.
 			if (Flive == 0) {
+				System.out.println("rows"+fcfs.getRows().size());
+				fcfs.Modify(fcfs.getRows());
 				fcfs.process();
 				Basicact(fcfs.getTimeline().size());
 
@@ -365,7 +375,10 @@ public class ActionController  implements Initializable {
 
 			// if Live (dynamic): invoke the function every time unit and update it.
 			else {
+
+				fcfs.Modify(fcfs.getRows());
 				fcfs.process();
+				System.out.println("\n"+fcfs.getRows().size()+"time line"+fcfs.getTimeline().size());
 				timeline = new Timeline(new KeyFrame(Duration.seconds(1), e ->{
 					if(elapsed < fcfs.getTimeline().size()) {	 try {
 						System.out.println(elapsed);

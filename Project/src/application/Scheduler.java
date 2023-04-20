@@ -91,4 +91,5 @@ public abstract class Scheduler {
     }
 
     public abstract void process();
+    public abstract void Modify(List<Process> rows);
 }
