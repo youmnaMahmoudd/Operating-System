@@ -87,11 +87,11 @@ public class Priority {
 		return ans;
 	}
 	private static int curProcess(int timer, ArrayList<Process> data) {
-		int priority = 0,ans = -1;
+		int priority = 100000,ans = -1;
 		for(int i = 0;i<data.size();i++) {
 			Process p = data.get(i);
 			if(p.getArrivalTime() <= timer &&
-			   p.getPriorityNumber() > priority) {
+			   p.getPriorityNumber() < priority) {
 				ans = i;
 				priority = p.getPriorityNumber();
 			}
@@ -101,13 +101,13 @@ public class Priority {
 	public static ArrayList<Process> sortProcess(ArrayList<Process> process){
 		ArrayList<Process> ans = new ArrayList<>();
 		ArrayList<Process> data = process;
-		int ind = -1,max = 0;
+		int ind = -1,max = 100000;
 		double arr = 100000;
 		while(data.size() > 0) {
-			ind = -1;max = 0;arr = 100000;
+			ind = -1;max = 100000;arr = 100000;
 			for(int i=0;i<data.size();i++) {
 				Process p = data.get(i);
-				if(p.getPriorityNumber() > max) {
+				if(p.getPriorityNumber() < max) {
 					ind = i;
 					max = p.getPriorityNumber();
 					arr = p.getArrivalTime();
