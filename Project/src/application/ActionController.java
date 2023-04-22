@@ -71,6 +71,8 @@ public class ActionController  implements Initializable {
 	String machine =   "Processes" ;
 	XYChart.Series series1 = new XYChart.Series();
 	Scheduler fcfs = new FirstComeFirstServe();
+
+	Scheduler fcfs2 = new FirstComeFirstServe();
 	SJF sjf=new SJF();
 	ArrayList<Process> shortestJobFirst=new ArrayList<Process>();
 	RoundRobin roundRobin = new RoundRobin(x.getQv());
@@ -123,14 +125,14 @@ public class ActionController  implements Initializable {
 		nameLabel.setText(username+" scheduler" );
 	}
 	public void displayAVwaiting(String username) {
-		nameLabel1.setText(username );
+		nameLabel2.setText(username );
 	}
 
 	public void displayElapsed(String username) {
 		AvgT1.setText(username );
 	}
 	public void displayAvTurnAround(String username) {
-		nameLabel2.setText(username );
+		nameLabel1.setText(username );
 	}
 	public void displayQt(String username) {
 		QV.setText(username );
@@ -162,23 +164,23 @@ public class ActionController  implements Initializable {
 			p=new Process("0",ATtext.getText(),BTtext.getText(),choice());
 			Process p2=new Process(p.getID(),p.getArrivalTime(),p.getBurstTime(),p.getPriority(),choice());
 			AV.add(p2);
-			data.add(p);			
+			data.add(p);
 			tableview.getItems().add(p);
 			if(elapsed>0)   {
 				timeline.stop();
 				int pos=0;
 				for(int i=0;i<data.size();i++) {
-					
+
 					data.get(i).compareP(shortestJobFirst,elapsed);
 					int f=(int) (shortestJobFirst.get(elapsed).getStartTime());
 //					if(data.get(i).getArrivalTime()<f)
 //						data.get(i).setArrivalTime(f);
 					if(shortestJobFirst.get(elapsed-1).getID().equals(data.get(i).getID())) {
 						data.get(i).setArrivalTime(f);
-					    pos=(int)data.get(i).getBurstTime();
+						pos=(int)data.get(i).getBurstTime();
 					}
 					else {
-						 f=(int) (shortestJobFirst.get(elapsed).getStartTime()+pos);
+						f=(int) (shortestJobFirst.get(elapsed).getStartTime()+pos);
 						if(data.get(i).getArrivalTime()<f) {
 							data.get(i).setArrivalTime(f);
 						}
@@ -189,14 +191,14 @@ public class ActionController  implements Initializable {
 		}else if(x.type==3) {
 			p=new Process(ATtext.getText(),BTtext.getText(),choice());
 			if(!fcfs.getRows().contains(p))
-				fcfs.add(p);			
+				fcfs.add(p);
 			tableview.getItems().add(p);
 		}
 		else if(x.type==4) {
 			p=new Process(Ptext.getText(),ATtext.getText(),BTtext.getText(),choice());
 			Process p2=new Process(p.getID(),p.getArrivalTime(),p.getBurstTime(),p.getPriority(),choice());
 			AV.add(p2);
-            data.add(p);
+			data.add(p);
 			tableview.getItems().add(p);
 			if(elapsed>0)   {
 				timeline.stop();
@@ -213,29 +215,29 @@ public class ActionController  implements Initializable {
 			p=new Process(Ptext.getText(),ATtext.getText(),BTtext.getText(),choice());
 			Process p2=new Process(p.getID(),p.getArrivalTime(),p.getBurstTime(),p.getPriority(),choice());
 			AV.add(p2);
-				data.add(p);
-				tableview.getItems().add(p);
-				if(elapsed>0)   {
-					timeline.stop();
-					int pos=0;
-					for(int i=0;i<data.size();i++) {
-						
-						data.get(i).compareP(priority,elapsed);
-						int f=(int) (priority.get(elapsed).getStartTime());
+			data.add(p);
+			tableview.getItems().add(p);
+			if(elapsed>0)   {
+				timeline.stop();
+				int pos=0;
+				for(int i=0;i<data.size();i++) {
+
+					data.get(i).compareP(priority,elapsed);
+					int f=(int) (priority.get(elapsed).getStartTime());
 //						if(data.get(i).getArrivalTime()<f)
 //							data.get(i).setArrivalTime(f);
-						if(priority.get(elapsed-1).getID().equals(data.get(i).getID())) {
+					if(priority.get(elapsed-1).getID().equals(data.get(i).getID())) {
+						data.get(i).setArrivalTime(f);
+						pos=(int)data.get(i).getBurstTime();
+					}
+					else {
+						f=(int) (priority.get(elapsed).getStartTime()+pos);
+						if(data.get(i).getArrivalTime()<f) {
 							data.get(i).setArrivalTime(f);
-						    pos=(int)data.get(i).getBurstTime();
-						}
-						else {
-							 f=(int) (priority.get(elapsed).getStartTime()+pos);
-							if(data.get(i).getArrivalTime()<f) {
-								data.get(i).setArrivalTime(f);
-							}
 						}
 					}
-					elapsed=0;
+				}
+				elapsed=0;
 			}
 		}
 		//Round Robin
@@ -246,7 +248,7 @@ public class ActionController  implements Initializable {
 			AV.add(p2);
 			data.add(p);
 			roundRobin.SetQ(x.getQv());
-			
+
 			roundRobin.setProcesses(data);
 			tableview.getItems().add(p);
 			if(elapsed>0)   {
@@ -261,18 +263,18 @@ public class ActionController  implements Initializable {
 				for(int i=0;i<data.size();i++) {
 					data.get(i).compare(RRprocess,elapsed);
 					int f=(int) (RRprocess.get(elapsed).getStart());
-					
+
 					if(data.get(i).getArrivalTime()<f) {
 						data.get(i).setArrivalTime(f);
 					}
-					
-					
+
+
 				}
-				
-			//	roundRobin.SetQ(x.getQv());
-				roundRobin = new RoundRobin(x.getQv());	
-			    roundRobin.setProcesses(data);
-			//	roundRobin.setTimer(0);
+
+				//	roundRobin.SetQ(x.getQv());
+				roundRobin = new RoundRobin(x.getQv());
+				roundRobin.setProcesses(data);
+				//	roundRobin.setTimer(0);
 				elapsed=0;
 
 
@@ -282,20 +284,21 @@ public class ActionController  implements Initializable {
 	}
 
 	ArrayList<Process> priority=new ArrayList<Process>();
-	
+
 	//Basic Display process on chart function
 	public void Basicact(int n) throws InterruptedException{
 		if(x.type==1||x.type==2) {
 			series1 = new XYChart.Series();
-			
+			int el=1;
 			for (int i = 0; i < n; i++)
-			{
+			{   displayElapsed(String.valueOf(el));
 				Process e = shortestJobFirst.get(i);
 				int x=(int) e.getDur();
 				series1.getData().addAll(new XYChart.Data(e.getStartTime(), machine,new ExtraData(x, shortestJobFirst.get(i).getColor())));
 
 				if(!lineChart.getData().contains(series1))
 					lineChart.getData().addAll(series1);
+				el++;
 			}
 
 			this.displayAvTurnAround(String.valueOf((int)sjf.turnAround(AV)));
@@ -304,29 +307,28 @@ public class ActionController  implements Initializable {
 
 		else if(x.type==3) {
 			series1 = new XYChart.Series();
-			List<Event> timeline = fcfs.getTimeline();
+			List<Event> timeline = fcfs2.getTimeline();
 			int e=1;
 			System.out.println("size of time line before Acsses"+fcfs.getTimeline().size());
 			for (int i = 0; i < n; i++)
 			{
 				displayElapsed(String.valueOf(e));
-				System.out.println("fcfs size"+fcfs.getRows().size());
-				System.out.println("processname"+timeline.get(i).getProcessName());
 				series1.getData().addAll(new XYChart.Data((int)timeline.get(i).getStartTime(), machine, new ExtraData((int)(timeline.get(i).getFinishTime()-timeline.get(i).getStartTime()),fcfs.getRow(timeline.get(i).getProcessName()).color)));
 				if(!lineChart.getData().contains(series1)) lineChart.getData().addAll(series1);
 				if (i == n - 1) {System.out.println("finish"+timeline.get(i).getFinishTime());}
 				e++;
 			}
+			displayAvTurnAround(String.valueOf(fcfs.getAverageTurnAroundTime()));
+			displayAVwaiting(String.valueOf(fcfs.getAverageWaitingTime()));
 			if (timeline.size() == n) timeline.clear();
 
-//			//Still need update
-	//		displayAvTurnAround(String.valueOf(fcfs.getAverageTurnAroundTime()));
-		//	displayAVwaiting(String.valueOf(fcfs.getAverageWaitingTime()));
 		}
+
 		else if(x.type==4) {
 			series1 = new XYChart.Series();
+			int el=1;
 			for (int i = 0; i < n; i++)
-			{
+			{   displayElapsed(String.valueOf(el));
 				Process e = priority.get(i);
 				int x=(int) e.getDur();
 				series1.getData().addAll(new XYChart.Data(e.getStartTime(), machine,new ExtraData(x, priority.get(i).getColor())));
@@ -334,7 +336,7 @@ public class ActionController  implements Initializable {
 				if(!lineChart.getData().contains(series1))
 					lineChart.getData().addAll(series1);
 				System.out.println(e.getColor() + " Start at: " + e.getStartTime() + " Btime: " + e.getBurstTime());
-
+				el++;
 			}
 			this.displayAvTurnAround(String.valueOf((int)pro.turnAround(AV)));
 			this.displayAVwaiting(String.valueOf((int)pro.waitingTime(AV)));
@@ -342,8 +344,9 @@ public class ActionController  implements Initializable {
 		}
 		else if(x.type==5) {
 			series1 = new XYChart.Series();
+			int el=1;
 			for (int i = 0; i < n; i++)
-			{
+			{   displayElapsed(String.valueOf(el));
 				Process e = priority.get(i);
 				int x=(int) e.getDur();
 				series1.getData().addAll(new XYChart.Data(e.getStartTime(), machine,new ExtraData(x, priority.get(i).getColor())));
@@ -353,7 +356,7 @@ public class ActionController  implements Initializable {
 
 
 				System.out.println(e.getColor() + " Start at: " + e.getStartTime() + " Btime: " + e.getBurstTime());
-
+				el++;
 			}
 			this.displayAvTurnAround(String.valueOf((int)pro.turnAround(AV)));
 			this.displayAVwaiting(String.valueOf((int)pro.waitingTime(AV)));
@@ -361,26 +364,22 @@ public class ActionController  implements Initializable {
 		//RR
 		else if(x.type==6) {
 			series1 = new XYChart.Series();
+			int el=1;
 			for (int i = 0; i < n; i++) {
+				displayElapsed(String.valueOf(el));
 				int c=RRprocess.get(i).end-RRprocess.get(i).start;
 
 				series1.getData().addAll(new XYChart.Data(RRprocess.get(i).getStart(), machine,new ExtraData( c, RRprocess.get(i).color)));
 
 				if(!lineChart.getData().contains(series1))
 					lineChart.getData().addAll(series1);
-
-				//System.out.println( elapsed+" <-The output time "+RRprocess.get(i).start);
-
+				el++;
 			}
-
-
 			this.displayAvTurnAround(String.valueOf((int)roundRobin.getAverageTurnAroundTime()));
 			this.displayAVwaiting(String.valueOf((int)roundRobin.getAverageWaitingTime()));
 		}
 
 	}
-
-
 
 	@FXML
 	//Man function to display dynamic and static charts.
@@ -440,20 +439,22 @@ public class ActionController  implements Initializable {
 			//if not live (static): invoke the function once with all data.
 			if (Flive == 0) {
 				System.out.println("rows"+fcfs.getRows().size());
-				fcfs.Modify(fcfs.getRows());
+				fcfs2.Modify(fcfs.getRows());
+				fcfs2.process();
 				fcfs.process();
-				Basicact(fcfs.getTimeline().size());
+				Basicact(fcfs2.getTimeline().size());
+
 
 			}
 
 			// if Live (dynamic): invoke the function every time unit and update it.
 			else {
-
-				fcfs.Modify(fcfs.getRows());
+				fcfs2.Modify(fcfs.getRows());
+				fcfs2.process();
 				fcfs.process();
-				System.out.println("\n"+fcfs.getRows().size()+"time line"+fcfs.getTimeline().size());
+				System.out.println("\n"+fcfs2.getRows().size()+"time line"+fcfs2.getTimeline().size());
 				timeline = new Timeline(new KeyFrame(Duration.seconds(1), e ->{
-					if(elapsed < fcfs.getTimeline().size()) {	 try {
+					if(elapsed < fcfs2.getTimeline().size()) {	 try {
 						System.out.println(elapsed);
 						System.out.println("size"+fcfs.getTimeline().size());
 						Basicact(++elapsed);
@@ -521,7 +522,7 @@ public class ActionController  implements Initializable {
 
 		//Round Robin
 		else if(x.type==6) {
-			
+
 			RRprocess=new ArrayList<Things>();
 			RRprocess=roundRobin.modify(roundRobin.execute());
 			roundRobin.print();
