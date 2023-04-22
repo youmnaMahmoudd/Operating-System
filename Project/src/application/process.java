@@ -43,6 +43,16 @@ public class Process {
 			this.arrivaltime = String.valueOf(arrivalTime);
 			this.currentBurst = String.valueOf(burstTime);
 		}
+
+	public Process(int ID,double arrivalTime,double burstTime,String color) {
+
+		this.ID = String.valueOf(ID);
+		this.arrivalTime = arrivalTime;
+		this.burstTime = burstTime;
+		this.color = color;
+		this.arrivaltime = String.valueOf(arrivalTime);
+		this.currentBurst = String.valueOf(burstTime);
+	}
 		public Process(String priority, String arrivaltime, String currentBurst,String c) {
 			counter++;
 			color=c;

@@ -32,27 +32,28 @@ public class FirstComeFirstServe extends Scheduler
     }
     public void Modify(List<Process> data){
         List <Process> ans = new ArrayList<>();
+        int id=1;
         for(int i=0;i<data.size();i++) {
             Process p = data.get(i);
             System.out.println(p.arrivaltime);
             int startTime = p.getStartTime();
             int dur = (int)p.getBurstTime();
             System.out.println(dur);
+
             for(int j = startTime;j<(dur+startTime);j++) {
-                Process g = new Process(p.getArrivalTime(), p.getBurstTime(), p.getColor());
+                Process g = new Process(id,p.getArrivalTime(), p.getBurstTime(), p.getColor());
                 System.out.println("g"+g.ID);
                 g.setStartTime(j);
                 g.setBurstTime(1);
                 ans.add(g);
             }
+            id++;
         }
-        System.out.println("ans" +ans.size());
         this.getRows().clear();
         for(int i=0;i< ans.size();i++){
             this.getRows().add(ans.get(i));
         }
 
-        System.out.println("FunSize"+this.getRows().size());
 
     }
 }
