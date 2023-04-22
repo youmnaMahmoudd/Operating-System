@@ -87,36 +87,20 @@ public class Process {
 			   if(processes.get(j).getName().equals(this.getID())) {
 		           if(this.getBurstTime()>0) 
 		        	   this.setBurstTime(this.getBurstTime()-1);
-			//	System.out.println(this.getColor() + " IN process Start at: " + this.getArrivalTime() + " BTime: " + this.getBurstTime());
+				System.out.println(this.getColor() + " IN process Start at: " + this.getArrivalTime() + " BTime: " + this.getBurstTime());
 			
 				
 				   }
 		   }
 		  
 	   }
-	   public static ArrayList<Process> modify(ArrayList<Process> data){
-			ArrayList<Process> ans = new ArrayList<>();
-			for(int i=0;i<data.size();i++) {
-				Process p = data.get(i);
-				int startTime = p.getStartTime(); 
-				int dur = (int)p.getDur();
-				
-				for(int j = startTime;j<(dur+startTime);j++) {
-					Process g = new Process(p.getID(),p.getArrivalTime(),
-							p.getBurstTime(),p.getPriority(),
-							p.getColor());
-					g.setStartTime(j);
-					g.setDur(1);
-					ans.add(g);
-				}
-			}
-			return ans;
-		}
+	
 	   public void compareP(ArrayList<Process> processes,int i) {
-			//   System.out.println(x);
+			 
 			   for(int j=0;j<i;j++) {
+				   System.out.println("ID: " + processes.get(j).getID()+" Start at: " +this.getID() );
 				   if(processes.get(j).getID().equals(this.getID())) {
-					//	System.out.println(this.getColor() + " Start at: " + this.getArrivalTime() + " BTime: " + this.getBurstTime());
+					System.out.println(this.getColor() + " Start at: " + this.getArrivalTime() + " BTime: " + this.getBurstTime());
 
 					   if(this.getBurstTime()>0) {
 			        	   this.setBurstTime(this.getBurstTime()-1);

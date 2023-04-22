@@ -117,7 +117,7 @@ public class RoundRobin{
     public static int getTimer() {
 		return timer;
 	}
-	public static void setTimer(int timer) {
+	public void setTimer(int timer) {
 		RoundRobin.timer = timer;
 	}
 	public double getAverageTurnAroundTime() {
@@ -141,8 +141,18 @@ public class RoundRobin{
         }
         System.out.println("--------------------------------");
     }
-    public void setProcesses(ArrayList<Process> processes) {
-		this.processes = processes;
+    public void setProcesses(ArrayList<Process> data) {
+    	ArrayList<Process> process =  new ArrayList<>();
+    	this.processes=new ArrayList<>();
+		for(int i9=0;i9<data.size();i9++) {
+			Process p = data.get(i9);
+			Process g = new Process(p.getID(),p.getArrivalTime(),
+					p.getBurstTime(),p.getPriority(),
+					p.getColor());
+			process.add(g);
+			
+		}
+		this.processes = process;
 	}
 	public void SetQ(int q) {this.q=q;}
     public ArrayList<Process> getProcesses() {

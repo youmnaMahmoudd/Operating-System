@@ -9,8 +9,16 @@ public class Priority {
 	
 	public static ArrayList<Process> priorityNonPremmetive(ArrayList<Process> data){
 		ArrayList<Process> ans = new ArrayList<>();
-		ArrayList<Process> process = data;
+		ArrayList<Process> process = new ArrayList<>();
 		int curTime = 0;
+		for(int i9=0;i9<data.size();i9++) {
+			Process p = data.get(i9);
+			Process g = new Process(p.getID(),p.getArrivalTime(),
+					p.getBurstTime(),p.getPriority(),
+					p.getColor());
+			process.add(g);
+			
+		}
 		while(process.size() > 0) {
 			int ind = curProcess(curTime,process);
 			if(ind != -1) {

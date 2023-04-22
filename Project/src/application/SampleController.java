@@ -141,16 +141,22 @@ public class SampleController {
 		type=6;
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("Action.fxml"));
 		root = loader.load();
+
 		setQv(Integer.parseInt(Quantumvalue.getText()));
 		ActionController scene2Controller = loader.getController();
 		String username="Round Robin";
 		scene2Controller.displayName(username);
 		scene2Controller.displayQt(Quantumvalue.getText());
 		scene2Controller.Action();
+		
+	
 		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		scene = new Scene(root);
+		String css = this.getClass().getResource("application.css").toExternalForm();
+		scene.getStylesheets().add(css);
 		stage.setScene(scene);
 		stage.show();
+		
 	}
 	public static int getQv() {
 		return Qv;
