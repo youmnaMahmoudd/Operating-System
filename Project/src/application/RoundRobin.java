@@ -174,5 +174,12 @@ public class RoundRobin{
 		}
 		return ans;
 	}
-
+    public int TotalBurst(){
+        ArrayList<Things> data=t;
+        int burst=0;
+        for(int i=0; i<data.size();i++){
+            burst= (int) (burst+data.get(i).end-data.get(i).start);
+        }
+        return burst;
+    }
 }

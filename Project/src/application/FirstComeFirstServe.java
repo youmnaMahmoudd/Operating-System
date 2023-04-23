@@ -1,9 +1,6 @@
 package application;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class FirstComeFirstServe extends Scheduler
 {
@@ -30,19 +27,19 @@ public class FirstComeFirstServe extends Scheduler
             row.setTurnAroundTime(row.getWaitingTime() + row.getBurstTime());
         }
     }
-    public void Modify(List<Process> data){
-        List <Process> ans = new ArrayList<>();
-        int id=1;
-        for(int i=0;i<data.size();i++) {
+    public void Modify(List<Process> data) {
+        List<Process> ans = new ArrayList<>();
+        int id = 1;
+        for (int i = 0; i < data.size(); i++) {
             Process p = data.get(i);
             System.out.println(p.arrivaltime);
             int startTime = p.getStartTime();
-            int dur = (int)p.getBurstTime();
+            int dur = (int) p.getBurstTime();
             System.out.println(dur);
 
-            for(int j = startTime;j<(dur+startTime);j++) {
-                Process g = new Process(id,p.getArrivalTime(), p.getBurstTime(), p.getColor());
-                System.out.println("g"+g.ID);
+            for (int j = startTime; j < (dur + startTime); j++) {
+                Process g = new Process(id, p.getArrivalTime(), p.getBurstTime(), p.getColor());
+                System.out.println("g" + g.ID);
                 g.setStartTime(j);
                 g.setBurstTime(1);
                 ans.add(g);
@@ -50,10 +47,17 @@ public class FirstComeFirstServe extends Scheduler
             id++;
         }
         this.getRows().clear();
-        for(int i=0;i< ans.size();i++){
+        for (int i = 0; i < ans.size(); i++) {
             this.getRows().add(ans.get(i));
         }
-
-
+    }
+    public int TotalBurst(){
+        List<Process> data=this.getRows();
+        int burst=0;
+        for(int i=0; i<data.size();i++){
+            burst= (int) (burst+(int)data.get(i).getBurstTime());
+        }
+        return burst;
     }
 }
+

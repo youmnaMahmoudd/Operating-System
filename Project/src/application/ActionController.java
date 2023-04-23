@@ -1,6 +1,7 @@
 package application;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.*;
 
@@ -40,6 +41,7 @@ public class ActionController  implements Initializable {
 	@FXML	Label nameLabel;
 	@FXML	Label nameLabel1;
 	@FXML	Label nameLabel2;
+	@FXML	Label nameBurst;
 	@FXML  Label  AvgT1;
 	@FXML TableView<Process> tableview;
 	@FXML TableColumn<Process,String> AT;
@@ -81,6 +83,21 @@ public class ActionController  implements Initializable {
 	//To compute time right
 	ArrayList<Process> TimeAV=new ArrayList<Process>();
 
+	public void reset(){
+		Flive= SampleController.Flive;
+		lineChart = new GanttChart<Number,String>(xAxis,yAxis);
+		data=new ArrayList<Process>();
+		machine =   "Processes" ;
+		series1 = new XYChart.Series();
+		fcfs = new FirstComeFirstServe();
+		fcfs2 = new FirstComeFirstServe();
+		sjf=new SJF();
+		shortestJobFirst=new ArrayList<Process>();
+		roundRobin = new RoundRobin(x.getQv());
+		RRprocess = new ArrayList<Things>();
+		AV=new ArrayList<Process>();
+		TimeAV=new ArrayList<Process>();
+	}
 	//Function to choose color
 
 	public String choice() {
@@ -116,6 +133,7 @@ public class ActionController  implements Initializable {
 
 	//To return to the start page
 	public void switchToScene1(ActionEvent event) throws IOException {
+		reset();
 		root = FXMLLoader.load(getClass().getResource("Sample.fxml"));
 		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		scene = new Scene(root);
@@ -140,6 +158,10 @@ public class ActionController  implements Initializable {
 		QV.setText(username );
 	}
 
+	public void displayBurst(String username) {
+		nameBurst.setText(username );
+	}
+
 
 	//Add new process to table
 	public void Add() throws IOException, InterruptedException {
@@ -149,47 +171,16 @@ public class ActionController  implements Initializable {
 			p=new Process("0",ATtext.getText(),BTtext.getText(),choice());
 			//(String ID,double arrivalTime,double burstTime,String priority,String color)
 			Process p2=new Process(p.getID(),p.getArrivalTime(),p.getBurstTime(),p.getPriority(),choice());
-			AV.add(p2);
-			data.add(p);
+			if(!AV.contains(p2))  AV.add(p2);
+			if(!data.contains(p)) data.add(p);
 			tableview.getItems().add(p);
-			if(elapsed>0)   {
-				timeline.stop();
-				for(int i=0;i<data.size();i++) {
-					data.get(i).compareP(shortestJobFirst,elapsed);
-					int f=(int) (shortestJobFirst.get(elapsed).getStartTime());
-					if(data.get(i).getArrivalTime()<f)
-						data.get(i).setArrivalTime(f);
-				}
-				elapsed=0;
-			}
 		}else if(x.type==2) {
 			p=new Process("0",ATtext.getText(),BTtext.getText(),choice());
 			Process p2=new Process(p.getID(),p.getArrivalTime(),p.getBurstTime(),p.getPriority(),choice());
-			AV.add(p2);
-			data.add(p);
+			if(!AV.contains(p2))  AV.add(p2);
+			if(!data.contains(p)) data.add(p);
 			tableview.getItems().add(p);
-			if(elapsed>0)   {
-				timeline.stop();
-				int pos=0;
-				for(int i=0;i<data.size();i++) {
 
-					data.get(i).compareP(shortestJobFirst,elapsed);
-					int f=(int) (shortestJobFirst.get(elapsed).getStartTime());
-//					if(data.get(i).getArrivalTime()<f)
-//						data.get(i).setArrivalTime(f);
-					if(shortestJobFirst.get(elapsed-1).getID().equals(data.get(i).getID())) {
-						data.get(i).setArrivalTime(f);
-						pos=(int)data.get(i).getBurstTime();
-					}
-					else {
-						f=(int) (shortestJobFirst.get(elapsed).getStartTime()+pos);
-						if(data.get(i).getArrivalTime()<f) {
-							data.get(i).setArrivalTime(f);
-						}
-					}
-				}
-				elapsed=0;
-			}
 		}else if(x.type==3) {
 			p=new Process(ATtext.getText(),BTtext.getText(),choice());
 			if(!fcfs.getRows().contains(p))
@@ -202,16 +193,7 @@ public class ActionController  implements Initializable {
 			AV.add(p2);
 			data.add(p);
 			tableview.getItems().add(p);
-			if(elapsed>0)   {
-				timeline.stop();
-				for(int i=0;i<data.size();i++) {
-					data.get(i).compareP(priority,elapsed);
-					int f=(int) (priority.get(elapsed).getStartTime());
-					if(data.get(i).getArrivalTime()<f)
-						data.get(i).setArrivalTime(f);
-				}
-				elapsed=0;
-			}
+
 		}
 		else if(x.type==5) {
 			p=new Process(Ptext.getText(),ATtext.getText(),BTtext.getText(),choice());
@@ -219,71 +201,19 @@ public class ActionController  implements Initializable {
 			AV.add(p2);
 			data.add(p);
 			tableview.getItems().add(p);
-			if(elapsed>0)   {
-				timeline.stop();
-				int pos=0;
-				for(int i=0;i<data.size();i++) {
-
-					data.get(i).compareP(priority,elapsed);
-					int f=(int) (priority.get(elapsed).getStartTime());
-//						if(data.get(i).getArrivalTime()<f)
-//							data.get(i).setArrivalTime(f);
-					if(priority.get(elapsed-1).getID().equals(data.get(i).getID())) {
-						data.get(i).setArrivalTime(f);
-						pos=(int)data.get(i).getBurstTime();
-					}
-					else {
-						f=(int) (priority.get(elapsed).getStartTime()+pos);
-						if(data.get(i).getArrivalTime()<f) {
-							data.get(i).setArrivalTime(f);
-						}
-					}
-				}
-				elapsed=0;
-			}
 		}
 		//Round Robin
 		else if(x.type==6) {
+
 			p=new Process("0",ATtext.getText(),BTtext.getText(),choice());
 			Process p2=new Process(p.getID(),p.getArrivalTime(),p.getBurstTime(),p.getPriority(),choice());
 			System.out.println(roundRobin.getProcesses().size());
 			AV.add(p2);
 			data.add(p);
-			roundRobin.SetQ(x.getQv());
-
+			roundRobin= new RoundRobin(x.getQv());
 			roundRobin.setProcesses(data);
 			tableview.getItems().add(p);
-			if(elapsed>0)   {
-				timeline.stop();
-//				int pos=x.getQv();
-//				String idpos=RRprocess.get(elapsed-1).getName();
-//				int s=1;
-//				while(RRprocess.get(elapsed-1).getName().equals(RRprocess.get(elapsed-s).getName())) {
-//					s++;pos--;
-//				}
-//				System.out.println("The pos and S "+pos+" "+s+" "+RRprocess.get(elapsed-1).getColor());
-				for(int i=0;i<data.size();i++) {
-					data.get(i).compare(RRprocess,elapsed);
-					int f=(int) (RRprocess.get(elapsed).getStart());
-
-					if(data.get(i).getArrivalTime()<f) {
-						data.get(i).setArrivalTime(f);
-					}
-
-
-				}
-
-				//	roundRobin.SetQ(x.getQv());
-				roundRobin = new RoundRobin(x.getQv());
-				roundRobin.setProcesses(data);
-				//	roundRobin.setTimer(0);
-				elapsed=0;
-
-
-			}
-
-		}
-	}
+		}}
 
 	ArrayList<Process> priority=new ArrayList<Process>();
 
@@ -292,6 +222,7 @@ public class ActionController  implements Initializable {
 		if(x.type==1||x.type==2) {
 			series1 = new XYChart.Series();
 			int el=1;
+			int burst=sjf.TotalBurst(shortestJobFirst);
 			for (int i = 0; i < n; i++)
 			{   displayElapsed(String.valueOf(el));
 				Process e = shortestJobFirst.get(i);
@@ -301,10 +232,11 @@ public class ActionController  implements Initializable {
 				if(!lineChart.getData().contains(series1))
 					lineChart.getData().addAll(series1);
 				el++;
+				burst=burst-(int)e.getDur();
 			}
-
-			this.displayAvTurnAround(String.valueOf(sjf.turnAround(TimeAV)));
-			this.displayAVwaiting(String.valueOf(sjf.waitingTime(TimeAV)));
+			displayBurst(String.valueOf(burst));
+			this.displayAvTurnAround(String.format("%.5f",sjf.turnAround(TimeAV)));
+			this.displayAVwaiting(String.format("%.5f",sjf.waitingTime(TimeAV)));
 		}
 
 		else if(x.type==3) {
@@ -312,6 +244,7 @@ public class ActionController  implements Initializable {
 			List<Event> timeline = fcfs2.getTimeline();
 			int e=1;
 			System.out.println("size of time line before Acsses"+fcfs.getTimeline().size());
+			int burst=fcfs2.TotalBurst();
 			for (int i = 0; i < n; i++)
 			{
 				displayElapsed(String.valueOf(e));
@@ -319,9 +252,11 @@ public class ActionController  implements Initializable {
 				if(!lineChart.getData().contains(series1)) lineChart.getData().addAll(series1);
 				if (i == n - 1) {System.out.println("finish"+timeline.get(i).getFinishTime());}
 				e++;
+				burst = burst-(int)(timeline.get(i).getFinishTime()-timeline.get(i).getStartTime());
 			}
-			displayAvTurnAround(String.valueOf(fcfs.getAverageTurnAroundTime()));
-			displayAVwaiting(String.valueOf(fcfs.getAverageWaitingTime()));
+			displayBurst(String.valueOf(burst));
+			displayAvTurnAround(String.format("%.5f",fcfs.getAverageTurnAroundTime()));
+			displayAVwaiting(String.format("%.5f",fcfs.getAverageWaitingTime()));
 			if (timeline.size() == n) timeline.clear();
 
 		}
@@ -329,6 +264,7 @@ public class ActionController  implements Initializable {
 		else if(x.type==4) {
 			series1 = new XYChart.Series();
 			int el=1;
+			int burst= pro.TotalBurst(priority);
 			for (int i = 0; i < n; i++)
 			{   displayElapsed(String.valueOf(el));
 				Process e = priority.get(i);
@@ -339,14 +275,17 @@ public class ActionController  implements Initializable {
 					lineChart.getData().addAll(series1);
 				System.out.println(e.getColor() + " Start at: " + e.getStartTime() + " Btime: " + e.getBurstTime());
 				el++;
+				burst=burst-(int)priority.get(i).getDur();
 			}
-			this.displayAvTurnAround(String.valueOf(pro.turnAround(TimeAV)));
-			this.displayAVwaiting(String.valueOf(pro.waitingTime(TimeAV)));
+			displayBurst(String.valueOf(burst));
+			this.displayAvTurnAround(String.format("%.5f",pro.turnAround(TimeAV)));
+			this.displayAVwaiting(String.format("%.5f",pro.waitingTime(TimeAV)));
 
 		}
 		else if(x.type==5) {
 			series1 = new XYChart.Series();
 			int el=1;
+			int burst= pro.TotalBurst(priority);
 			for (int i = 0; i < n; i++)
 			{   displayElapsed(String.valueOf(el));
 				Process e = priority.get(i);
@@ -355,30 +294,34 @@ public class ActionController  implements Initializable {
 
 				if(!lineChart.getData().contains(series1))
 					lineChart.getData().addAll(series1);
-
+				burst=burst-(int)priority.get(i).getDur();
 
 				System.out.println(e.getColor() + " Start at: " + e.getStartTime() + " Btime: " + e.getBurstTime());
 				el++;
 			}
-			this.displayAvTurnAround(String.valueOf(pro.turnAround(TimeAV)));
-			this.displayAVwaiting(String.valueOf(pro.waitingTime(TimeAV)));
+			displayBurst(String.valueOf(burst));
+			this.displayAvTurnAround(String.format("%.5f",pro.turnAround(TimeAV)));
+			this.displayAVwaiting(String.format("%.5f",pro.waitingTime(TimeAV)));
 		}
 		//RR
 		else if(x.type==6) {
 			series1 = new XYChart.Series();
 			int el=1;
+			int burst=roundRobin.TotalBurst();
 			for (int i = 0; i < n; i++) {
 				displayElapsed(String.valueOf(el));
 				int c=RRprocess.get(i).end-RRprocess.get(i).start;
-
 				series1.getData().addAll(new XYChart.Data(RRprocess.get(i).getStart(), machine,new ExtraData( c, RRprocess.get(i).color)));
 
 				if(!lineChart.getData().contains(series1))
 					lineChart.getData().addAll(series1);
 				el++;
+				burst=burst-c;
+
 			}
-			this.displayAvTurnAround(String.valueOf(roundRobin.getAverageTurnAroundTime()));
-			this.displayAVwaiting(String.valueOf(roundRobin.getAverageWaitingTime()));
+			displayBurst(String.valueOf(burst));
+			this.displayAvTurnAround(String.format("%.5f",roundRobin.getAverageTurnAroundTime()));
+			this.displayAVwaiting(String.format("%.5f",roundRobin.getAverageWaitingTime()));
 		}
 
 	}
@@ -395,11 +338,9 @@ public class ActionController  implements Initializable {
 			sjf.print(shortestJobFirst);
 			if(Flive==0) {
 				Basicact(shortestJobFirst.size());
+				shortestJobFirst.clear();
 			} else {
-
-
 				timeline = new Timeline(new KeyFrame(Duration.seconds(1), e ->{
-
 					if(elapsed < shortestJobFirst.size()) {	 try {
 						Basicact(++elapsed);
 					} catch (InterruptedException e1) {
@@ -410,8 +351,9 @@ public class ActionController  implements Initializable {
 					}}));
 				timeline.setCycleCount(Animation.INDEFINITE);
 				timeline.play();
+				elapsed=0;
+				//shortestJobFirst.clear();
 			}
-
 		}
 		else if(x.type==2) {
 			shortestJobFirst=new ArrayList<Process>();
@@ -420,23 +362,21 @@ public class ActionController  implements Initializable {
 			sjf.print(shortestJobFirst);
 			if(Flive==0) {
 				Basicact(shortestJobFirst.size());
+				shortestJobFirst.clear();
 			} else {
-
-
 				timeline = new Timeline(new KeyFrame(Duration.seconds(1), e ->{
-
 					if(elapsed < shortestJobFirst.size()) {	 try {
 						Basicact(++elapsed);
 					} catch (InterruptedException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-
 					}}));
 				timeline.setCycleCount(Animation.INDEFINITE);
 				timeline.play();
+				elapsed=0;
+				//shortestJobFirst.clear();
 			}
-
 		}
 
 		//FCFS
@@ -473,21 +413,17 @@ public class ActionController  implements Initializable {
 				timeline.play();
 
 			}
-
+			elapsed=0;
 		}
 		else if(x.type==4) {
 			priority=new ArrayList<Process>();
-			priority=pro.modify(pro.pp(data));
 			TimeAV=pro.pp(data);
+			priority=pro.modify(pro.pp(data));
 			System.out.println("The size of array"+priority.size());
 			if(Flive==0) {
 				Basicact(priority.size());
-
 			} else {
-
-
 				timeline = new Timeline(new KeyFrame(Duration.seconds(1), e ->{
-
 					if(elapsed < priority.size()) {	 try {
 						Basicact(++elapsed);
 					} catch (InterruptedException e1) {
@@ -498,13 +434,14 @@ public class ActionController  implements Initializable {
 					}}));
 				timeline.setCycleCount(Animation.INDEFINITE);
 				timeline.play();
+				elapsed=0;
 			}
 
 		}
 		else if(x.type==5) {
 			priority=new ArrayList<Process>();
-			priority=pro.modify(pro.priorityNonPremmetive(data));
 			TimeAV=pro.priorityNonPremmetive(data);
+			priority=pro.modify(TimeAV);
 			if(Flive==0) {
 				Basicact(priority.size());
 				priority.clear();
@@ -523,6 +460,7 @@ public class ActionController  implements Initializable {
 					}}));
 				timeline.setCycleCount(Animation.INDEFINITE);
 				timeline.play();
+				elapsed=0;
 			}
 		}
 
@@ -533,12 +471,11 @@ public class ActionController  implements Initializable {
 			RRprocess=roundRobin.modify(roundRobin.execute());
 			roundRobin.print();
 			if (Flive == 0) {
-				//RRprocess=new ArrayList<Things>();
+				Basicact(RRprocess.size());
+				roundRobin.t.clear();
+			}
 
-				Basicact(RRprocess.size());}
 			else {
-
-
 				timeline = new Timeline(new KeyFrame(Duration.seconds(1), e ->{
 
 					if(elapsed < RRprocess.size()) {	 try {
@@ -551,6 +488,7 @@ public class ActionController  implements Initializable {
 					}}));
 				timeline.setCycleCount(Animation.INDEFINITE);
 				timeline.play();
+				elapsed=0;
 			}
 		}
 	}

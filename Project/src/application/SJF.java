@@ -212,4 +212,13 @@ public class SJF {
 		double avgTurnaroundTime = totalTurnaroundTime / numProcesses; // calculate the average turnaround time
 		return avgTurnaroundTime;
 	}
+	public int TotalBurst(ArrayList<Process> data){
+		int burst=0;
+		for(int i=0; i<data.size();i++){
+			burst= (int) (burst+(int)data.get(i).getDur());
+
+		}
+		System.out.println("burst"+burst);
+		return burst;
+	}
 }
