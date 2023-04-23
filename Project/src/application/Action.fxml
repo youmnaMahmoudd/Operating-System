@@ -11,7 +11,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="564.0" prefWidth="656.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ActionController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="564.0" prefWidth="656.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ActionController">
    <children>
       <Label layoutX="18.0" layoutY="84.0" text="time elapsed" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#81a5c5" height="54.0" layoutX="1.0" layoutY="1.0" stroke="BLACK" strokeType="INSIDE" width="656.0" />
@@ -28,18 +28,16 @@
       <TextField fx:id="BTtext" layoutX="463.0" layoutY="376.0" prefHeight="31.0" prefWidth="71.0" />
       <Button fx:id="Add" layoutX="560.0" layoutY="351.0" mnemonicParsing="false" onAction="#Add" text="Add Process" />
       <TextField fx:id="Ptext" layoutX="463.0" layoutY="461.0" prefHeight="31.0" prefWidth="71.0" />
-      
+
       <TableView fx:id="tableview" layoutX="18.0" layoutY="312.0" prefHeight="199.0" prefWidth="357.0">
-        <columns>
-          <TableColumn fx:id="ID" prefWidth="50.00000190734863" text="PID" />
-          <TableColumn fx:id="AT" prefWidth="91.99999237060547" text="Arrival time" />
+         <columns>
+            <TableColumn fx:id="ID" prefWidth="50.00000190734863" text="PID" />
+            <TableColumn fx:id="AT" prefWidth="91.99999237060547" text="Arrival time" />
             <TableColumn fx:id="BT" prefWidth="71.99996948242188" text="Burst time" />
             <TableColumn fx:id="C" prefWidth="72.66664123535156" text="Color" />
             <TableColumn fx:id="P" prefWidth="72.66664123535156" text="Priority" />
-        </columns>
+         </columns>
       </TableView>
-      <Label fx:id="QV" layoutX="432.0" layoutY="112.0" text="[time]" />
-      <Label fx:id="QT" layoutX="409.0" layoutY="84.0" text="Quantum time" />
       <HBox fx:id="hbox" layoutX="12.0" layoutY="143.0" prefHeight="115.0" prefWidth="664.0" />
       <Button layoutX="565.0" layoutY="464.0" mnemonicParsing="false" onAction="#switchToScene1" prefHeight="25.0" prefWidth="71.0" text="Return" />
       <ComboBox fx:id="choiceBox" layoutX="458.0" layoutY="422.0" onAction="#choice" prefHeight="25.0" prefWidth="81.0" />
@@ -49,5 +47,9 @@
       <Label layoutX="400.0" layoutY="426.0" text="Color" />
       <Label fx:id="pr" layoutX="400.0" layoutY="468.0" text="Priority" />
       <Button layoutX="567.0" layoutY="430.0" mnemonicParsing="false" onAction="#start" prefHeight="25.0" prefWidth="68.0" text="Start" />
+      <Label fx:id="QT1" layoutX="409.0" layoutY="82.0" text="Remaining Burst" />
+      <Label fx:id="nameBurst" layoutX="431.0" layoutY="111.0" text="[time]" />
+      <Label fx:id="QT" layoutX="538.0" layoutY="82.0" text="Quantum time" />
+      <Label fx:id="QV" layoutX="566.0" layoutY="112.0" text="[time]" />
    </children>
 </AnchorPane>

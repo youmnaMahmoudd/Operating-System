@@ -3,11 +3,12 @@ package application;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map.Entry;
 
 
 public class SJF {
-	
+
 	public static ArrayList<Process> shortestJobFirstNonPreemptive(ArrayList<Process> data){
 		ArrayList<Process> ans = new ArrayList<>();
 		ArrayList<Process> process =  new ArrayList<>();
@@ -18,7 +19,7 @@ public class SJF {
 					p.getBurstTime(),p.getPriority(),
 					p.getColor());
 			process.add(g);
-			
+
 		}
 		while(process.size() > 0) {
 			int ind = curProcess(curTime,process);
@@ -50,7 +51,7 @@ public class SJF {
 		}
 
 		ArrayList<Process> sorted = sortProcess(sort);
-		
+
 		int curTime = 0;
 		while(process.size() > 0) {
 			sorted=sortProcess(sorted);
@@ -73,7 +74,7 @@ public class SJF {
 						break;
 					}
 					if(s.getArrivalTime() < minArr) {
-						
+
 						minArr = s.getArrivalTime();
 					}
 				}
@@ -87,7 +88,7 @@ public class SJF {
 					g.setDur(p.getBurstTime());
 					curTime = (int) (curTime+p.getBurstTime());
 					sorted.remove(in);
-					process.remove(ind);		
+					process.remove(ind);
 				}else {
 					double stay = minArr - curTime;
 					g.setDur(stay);
@@ -106,7 +107,7 @@ public class SJF {
 		for(int i = 0;i<data.size();i++) {
 			Process p = data.get(i);
 			if(p.getArrivalTime() <= timer &&
-			   p.getBurstTime() < time) {
+					p.getBurstTime() < time) {
 				ans = i;
 				time = (int) p.getBurstTime();
 			}
@@ -141,9 +142,9 @@ public class SJF {
 		ArrayList<Process> ans = new ArrayList<>();
 		for(int i=0;i<data.size();i++) {
 			Process p = data.get(i);
-			int startTime = p.getStartTime(); 
+			int startTime = p.getStartTime();
 			int dur = (int)p.getDur();
-			
+
 			for(int j = startTime;j<(dur+startTime);j++) {
 				Process g = new Process(p.getID(),p.getArrivalTime(),
 						p.getBurstTime(),p.getPriority(),
@@ -155,50 +156,60 @@ public class SJF {
 		}
 		return ans;
 	}
-public void print(ArrayList<Process> m) {
-		
+	public void print(ArrayList<Process> m) {
+
 		for(int i = 0;i<m.size();i++) {
 			Process e = m.get(i);
 			System.out.println(e.getID() + " Start at: " + e.getStartTime() + " Dur: " + e.getDur());
 		}
 		System.out.println("--------------------");
 	}
-public static double turnAround(ArrayList<Process> data) {
-	double ans = 0.0;
-	HashMap<Integer,Integer> m = new HashMap<>();
-	for(int i=0;i<data.size();i++) {
-		Process p = data.get(i);
-		String id = p.getID();
-		int startTime = p.getStartTime(); 
-		int dur = (int)p.getDur();
-		m.put(Integer.parseInt(id), startTime+dur - (int)p.getArrivalTime());
+
+	public static double waitingTime(ArrayList<Process> data) {
+		double totalWaitingTime = 0.0;
+		HashMap<Integer, Double> waitingTimeMap = new HashMap<>(); // map to keep track of the total waiting time for each process
+		HashMap<Integer, Integer> countMap = new HashMap<>(); // map to keep track of the number of parts for each process
+		HashMap<Integer, Double> prevEndTimeMap = new HashMap<>(); // map to keep track of the end time of the previous part for each process
+		for (Process p : data) {
+			int id = Integer.parseInt(p.getID());
+			double arrivalTime = prevEndTimeMap.getOrDefault(id, p.getArrivalTime());
+			double startTime = p.getStartTime();
+			double duration = p.getDur();
+			double waitingTime = Math.max(0, startTime - arrivalTime); // calculate the waiting time for the current part
+			if (countMap.containsKey(id)) { // if the process has already started, add the waiting time of the current part to the total waiting time
+				waitingTime += waitingTimeMap.get(id);
+			}
+			waitingTimeMap.put(id, waitingTime); // update the total waiting time for the current process in the map
+			countMap.put(id, countMap.getOrDefault(id, 0) + 1); // update the number of parts for the current process in the map
+			prevEndTimeMap.put(id, startTime + duration); // update the end time of the previous part for the current process
+			totalWaitingTime += waitingTime;
+		}
+		double numProcesses = waitingTimeMap.keySet().size();
+		double avgWaitingTime = totalWaitingTime / numProcesses;
+		return avgWaitingTime;
 	}
-	double num = 0;
-	for(Entry<Integer, Integer> e : m.entrySet()) {
-		num++;
-		ans+=e.getValue();
+
+
+	public static double turnAround(ArrayList<Process> data) {
+		HashMap<Integer, Double> turnaroundTimes = new HashMap<>(); // map to keep track of the turnaround time for each process
+		double totalTurnaroundTime = 0.0; // variable to keep track of the total turnaround time
+		for (Process p : data) {
+			int id = Integer.parseInt(p.getID());
+			double arrivalTime = p.getArrivalTime();
+			double startTime = p.getStartTime();
+			double duration = p.getDur();
+			double turnaroundTime = duration + Math.max(0, startTime - arrivalTime); // calculate the turnaround time for the current process
+			if (turnaroundTimes.containsKey(id)) { // if we've already seen this process, replace its turnaround time with the new one
+				turnaroundTimes.put(id, turnaroundTime);
+			} else { // otherwise, add it to the map
+				turnaroundTimes.put(id, turnaroundTime);
+			}
+		}
+		for (double turnaroundTime : turnaroundTimes.values()) { // loop through the turnaround times and add them up
+			totalTurnaroundTime += turnaroundTime;
+		}
+		double numProcesses = turnaroundTimes.keySet().size(); // calculate the number of processes
+		double avgTurnaroundTime = totalTurnaroundTime / numProcesses; // calculate the average turnaround time
+		return avgTurnaroundTime;
 	}
-	return ans / num;
-}
-public static double waitingTime(ArrayList<Process> data) {
-	double ans = 0.0;
-	HashMap<Integer,Integer> m = new HashMap<>();
-	HashMap<Integer,Integer> count = new HashMap<>();
-	for(int i=0;i<data.size();i++) {
-		Process p = data.get(i);
-		String id = p.getID();
-		int startTime = p.getStartTime(); 
-		int dur = (int)p.getDur();
-		m.put(Integer.parseInt(id), startTime+dur - (int)p.getArrivalTime());
-		if(count.get(Integer.parseInt(id)) != null)
-			count.put(Integer.parseInt(id), count.get(Integer.parseInt(id)) + 1);
-		else count.put(Integer.parseInt(id),1);
-	}
-	double num = 0;
-	for(Entry<Integer, Integer> e : m.entrySet()) {
-		num++;
-		ans+=e.getValue()-count.get(e.getKey());
-	}
-	return ans / num;
-}
 }

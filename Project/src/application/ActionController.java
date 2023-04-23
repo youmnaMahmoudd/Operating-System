@@ -78,6 +78,8 @@ public class ActionController  implements Initializable {
 	RoundRobin roundRobin = new RoundRobin(x.getQv());
 	ArrayList<Things> RRprocess = new ArrayList<Things>();
 	ArrayList<Process> AV=new ArrayList<Process>();
+	//To compute time right
+	ArrayList<Process> TimeAV=new ArrayList<Process>();
 
 	//Function to choose color
 
@@ -301,8 +303,8 @@ public class ActionController  implements Initializable {
 				el++;
 			}
 
-			this.displayAvTurnAround(String.valueOf((int)sjf.turnAround(AV)));
-			this.displayAVwaiting(String.valueOf((int)sjf.waitingTime(AV)));
+			this.displayAvTurnAround(String.valueOf(sjf.turnAround(TimeAV)));
+			this.displayAVwaiting(String.valueOf(sjf.waitingTime(TimeAV)));
 		}
 
 		else if(x.type==3) {
@@ -338,8 +340,8 @@ public class ActionController  implements Initializable {
 				System.out.println(e.getColor() + " Start at: " + e.getStartTime() + " Btime: " + e.getBurstTime());
 				el++;
 			}
-			this.displayAvTurnAround(String.valueOf((int)pro.turnAround(AV)));
-			this.displayAVwaiting(String.valueOf((int)pro.waitingTime(AV)));
+			this.displayAvTurnAround(String.valueOf(pro.turnAround(TimeAV)));
+			this.displayAVwaiting(String.valueOf(pro.waitingTime(TimeAV)));
 
 		}
 		else if(x.type==5) {
@@ -358,8 +360,8 @@ public class ActionController  implements Initializable {
 				System.out.println(e.getColor() + " Start at: " + e.getStartTime() + " Btime: " + e.getBurstTime());
 				el++;
 			}
-			this.displayAvTurnAround(String.valueOf((int)pro.turnAround(AV)));
-			this.displayAVwaiting(String.valueOf((int)pro.waitingTime(AV)));
+			this.displayAvTurnAround(String.valueOf(pro.turnAround(TimeAV)));
+			this.displayAVwaiting(String.valueOf(pro.waitingTime(TimeAV)));
 		}
 		//RR
 		else if(x.type==6) {
@@ -375,8 +377,8 @@ public class ActionController  implements Initializable {
 					lineChart.getData().addAll(series1);
 				el++;
 			}
-			this.displayAvTurnAround(String.valueOf((int)roundRobin.getAverageTurnAroundTime()));
-			this.displayAVwaiting(String.valueOf((int)roundRobin.getAverageWaitingTime()));
+			this.displayAvTurnAround(String.valueOf(roundRobin.getAverageTurnAroundTime()));
+			this.displayAVwaiting(String.valueOf(roundRobin.getAverageWaitingTime()));
 		}
 
 	}
@@ -384,10 +386,12 @@ public class ActionController  implements Initializable {
 	@FXML
 	//Man function to display dynamic and static charts.
 	public void start() throws InterruptedException {
-
+		data.clear();
+		data.addAll(AV);
 		if(x.type==1) {
 			shortestJobFirst=new ArrayList<Process>();
 			shortestJobFirst=sjf.modify(sjf.shortestJobFirstPreemptive(data));
+			TimeAV=sjf.shortestJobFirstPreemptive(data);
 			sjf.print(shortestJobFirst);
 			if(Flive==0) {
 				Basicact(shortestJobFirst.size());
@@ -412,6 +416,7 @@ public class ActionController  implements Initializable {
 		else if(x.type==2) {
 			shortestJobFirst=new ArrayList<Process>();
 			shortestJobFirst=sjf.modify(sjf.shortestJobFirstNonPreemptive(data));
+			TimeAV=sjf.shortestJobFirstNonPreemptive(data);
 			sjf.print(shortestJobFirst);
 			if(Flive==0) {
 				Basicact(shortestJobFirst.size());
@@ -473,7 +478,7 @@ public class ActionController  implements Initializable {
 		else if(x.type==4) {
 			priority=new ArrayList<Process>();
 			priority=pro.modify(pro.pp(data));
-
+			TimeAV=pro.pp(data);
 			System.out.println("The size of array"+priority.size());
 			if(Flive==0) {
 				Basicact(priority.size());
@@ -499,6 +504,7 @@ public class ActionController  implements Initializable {
 		else if(x.type==5) {
 			priority=new ArrayList<Process>();
 			priority=pro.modify(pro.priorityNonPremmetive(data));
+			TimeAV=pro.priorityNonPremmetive(data);
 			if(Flive==0) {
 				Basicact(priority.size());
 				priority.clear();
