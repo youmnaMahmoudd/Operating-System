@@ -24,12 +24,12 @@ Choose a scheduling algorithm from the dropdown menu.
 
 Input the details of the processes you want to simulate, including their arrival time, burst time, and priority (if using priority scheduling).
 
-Click the "Simulate" button to run the simulation.
+Click the "start" button to run the simulation.
 
-View the results, including the order in which the processes are executed, the waiting time and turnaround time for each process, and the average waiting time and turnaround time for the entire set of processes.
+View the results, including the order in which the processes are executed and the average waiting time and turnaround time for the entire set of processes.
 
-Adjust the time quantum for the Round Robin algorithm using the slider, if necessary.
+Adjust the time quantum for the Round Robin algorithm in the separate screen, when asked.
 
-View the Gantt chart for the selected scheduling algorithm by clicking the "View Gantt Chart" button.
+View the Gantt chart for the selected scheduling algorithm.
 
 Repeat steps 2-7 with different scheduling algorithms and process inputs to compare the results.
